@@ -1,0 +1,19 @@
+<component-set>
+  <components>  
+    <component>
+      <role>org.codehaus.plexus.component.configurator.ComponentConfigurator</role>
+      <implementation>org.scala_tools.maven.plexus.ScalaComponentConfigurator</implementation>
+      <role-hint>scala</role-hint>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.component.factory.ComponentFactory</role>
+      <implementation>org.scala_tools.maven.plexus.ScalaComponentFactory</implementation>
+      <role-hint>scala</role-hint>
+    </component>
+    <component>
+      <role>org.apache.maven.tools.plugin.extractor.MojoDescriptorExtractor</role>
+      <implementation>org.scala_tools.maven.mojo.extractor.ScalaMojoDescriptionExtractor</implementation>
+      <role-hint>scala</role-hint>
+    </component>    
+  </components>
+</component-set>
