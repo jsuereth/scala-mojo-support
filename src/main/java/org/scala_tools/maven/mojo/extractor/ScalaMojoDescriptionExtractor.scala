@@ -23,17 +23,15 @@ class ScalaMojoDescriptionExtractor extends MojoDescriptorExtractor {
     @throws(classOf[ExtractionException]) 
 	override def execute(project : MavenProject, pluginDescriptor : PluginDescriptor) : java.util.List[_]= {
 		//TODO - parse through scala file and rip out MOJO annotations
-		val mojoDescriptions : Seq[MojoDescriptor]= for {
+		val sourceFiles = for {
 		  root <- project.getCompileSourceRoots().asInstanceOf[java.util.List[String]]
           if new java.io.File(root).isDirectory
           source <- PluginUtils.findSources(root, "**/*.scala")
-		} yield extractMojoDescription(source, project, pluginDescriptor)
-
-        val descriptionsAsList = new java.util.ArrayList[MojoDescriptor](mojoDescriptions.length)
-        for(desc <- mojoDescriptions) {
-          descriptionsAsList.add(desc)
-        }
-        descriptionsAsList
+		} yield root + java.io.File.separator + source
+         
+        val compiler = new MojoExtractorCompiler(project)
+        val mojoDescriptors = compiler.extract(sourceFiles : _*).toArray
+        java.util.Arrays.asList(mojoDescriptors : _*)
 	}
 	/**
 	 * Attempt to extract the mojo description from a particular file.

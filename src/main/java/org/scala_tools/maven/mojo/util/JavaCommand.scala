@@ -8,8 +8,11 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoFailureException
 import scala.collection.jcl.Conversions._
 
+/**
+ * Class used to start a java process.
+ */
 class JavaCommand(requester : AbstractMojo, mainClassName : String, classpath : String, var jvmArgs : Seq[String], var args : Seq[String]) {
-
+  var logOnly = false;
   val env = for(key <- System.getenv().keySet) yield {
     key + "=" + System.getenv(key)
   }
@@ -36,7 +39,14 @@ class JavaCommand(requester : AbstractMojo, mainClassName : String, classpath : 
   @throws(classOf[Exception])
   def run(displayCmd : Boolean, throwFailure : Boolean) {
     val process = spawn(displayCmd)
-    
+    if(logOnly) {
+            new StreamLogger(process.getErrorStream(), requester.getLog(), true).start();
+            new StreamLogger(process.getInputStream(), requester.getLog(), false).start();
+     } else {
+            new StreamPiper(process.getInputStream(), System.out).start();
+            //new StreamPiper(System.in, p.getOutputStream()).start();
+            new ConsolePiper(process).start();
+        }
     //TODO - Figure out how to dump output into log or console
     val retVal = process.waitFor()
     if(throwFailure && (retVal != 0)) {
@@ -59,7 +69,9 @@ class JavaCommand(requester : AbstractMojo, mainClassName : String, classpath : 
   
 }
 
-
+/**
+ * Helper methods for attempting to execute a java process.
+ */
 object JavaCommand {
   /** Takes a sequence of paths and returns a string usable on the command line*/
   def toMultiPath(paths : Seq[String]) = 

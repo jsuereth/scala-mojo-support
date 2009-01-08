@@ -2,10 +2,17 @@ package org.scala_tools.maven.mojo.extractor
 
 import scala.tools.nsc._
 import scala.tools.nsc.reporters._
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugin.descriptor.InvalidPluginDescriptorException;
+import org.apache.maven.plugin.descriptor.MojoDescriptor;
+import org.apache.maven.plugin.descriptor.Parameter;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
 
-class MojoExtractorCompiler {
+import mojo.util.MavenProjectTools
+
+class MojoExtractorCompiler(project : MavenProject) extends MavenProjectTools{
   //Method to extract mojo description from a source file.
-  def extract(sourceFiles : String*) = {
+  def extract(sourceFiles : String*) : Seq[MojoDescriptor] = {
       //helper method to initialize settings
 	  def initialize : (Settings, Reporter) = {
 	    val settings = new Settings();
@@ -24,7 +31,7 @@ class MojoExtractorCompiler {
 	      run.compile(sourceFiles.toList)       
           //Extract mojo description
           def extractMojos(unit : compiler.CompilationUnit) {
-            
+            import compiler._
             for(info <- compiler.parseCompilationUnitBody(unit.body)) {
               Console.println(info)
             }
@@ -32,10 +39,13 @@ class MojoExtractorCompiler {
           for(unit <- run.units if !unit.isJava) {
             extractMojos(unit)
           }
+          Nil
 	  }
       
-    val (settings, reporter) = initialize
-    settings.classpath.tryToSet("-classpath" :: "" :: Nil)
+    val (settings, reporter) = initialize    
+    val classpath = getCompileClasspathString(project)
+    System.err.println("Classpath = " + classpath)
+    settings.classpath.tryToSet("-classpath" :: classpath :: Nil)
     execute(settings, reporter)
   } 
 }
@@ -52,20 +62,23 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     def parseClass(tree : ClassDef, pkgName : String) = {
       val info = new MojoClassInfo(tree.name.toString)
       
-      for(annotation <- tree.mods.annotations) {
-        info.annotation(annotation.symbol.toString)
+      //TODO - Rip annotations from the class
+      
+      /*for(annotation <- tree.mods.annotations) {
+        if(annotation.symbol != null) {
+          info.annotation(annotation.symbol.toString)
+        }
+      }*/
+      for(annotation <- tree.tpe.attributes) {
+        info.annotation(annotation.atp.safeToString)
       }
+      
       
       info
     }
     import scala.collection.mutable
-    def parsePackages(body : Tree, pkgName : String, infos : mutable.ListBuffer[MojoClassInfo]) : Unit = {
+    def parseClasses(body : Tree, pkgName : String, infos : mutable.ListBuffer[MojoClassInfo]) : Unit = {
       body match {
-         case tree : PackageDef =>
-           val pkgName = tree.symbol.name.toString
-           for(stat <- tree.stats) {
-             parsePackages(stat, pkgName, infos)
-           }
          case tree : ClassDef =>
            infos.append(parseClass(tree, pkgName))
          case _ => //IGnore
@@ -75,7 +88,7 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     //Pull out mojo class information
     val classInfos = new mutable.ListBuffer[MojoClassInfo]    
     for(node <- body) {
-      parsePackages(node, "", classInfos)
+      parseClasses(node, "", classInfos)
     }
     classInfos
   }
