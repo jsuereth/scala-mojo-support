@@ -64,15 +64,9 @@ trait MojoAnnotationExtractor extends CompilationUnits {
       
       //TODO - Rip annotations from the class
       
-      /*for(annotation <- tree.mods.annotations) {
-        if(annotation.symbol != null) {
-          info.annotation(annotation.symbol.toString)
-        }
-      }*/
-      for(annotation <- tree.tpe.attributes) {
-        info.annotation(annotation.atp.safeToString)
+      for(annotation <- tree.mods.annotations) {
+        info.annotation(annotation.tpe.safeToString)
       }
-      
       
       info
     }
