@@ -41,11 +41,17 @@ class ScalaComponentFactory extends AbstractComponentFactory {
       val constructorPrefix = "$$constructor$"
       //TODO - See if we need to inject into the constructor somehow
       var clazz = loadScalaClass(componentDescriptor.getImplementation)
-      val constructorArgs = (for {
-        child <- componentDescriptor.getConfiguration.getChildren
-        if child.getName.startsWith(constructorPrefix)
-        val order = child.getName.substring(constructorPrefix.length)
-      } yield (child, order)).toList.sort(_._2 < _._2).map(_._1).toArray
+      
+      //TODO - Ignore this constructor krap until we fix the mojo desc extractor
+      val constructorArgs : Array[PlexusConfiguration] = if(componentDescriptor.getConfiguration != null) {
+	       (for {        
+	        child <- componentDescriptor.getConfiguration.getChildren
+	        if child.getName.startsWith(constructorPrefix)
+	        val order = child.getName.substring(constructorPrefix.length)
+	      } yield (child, order)).toList.sort(_._2 < _._2).map(_._1).toArray
+      } else {
+        Array()
+      }
       //THis will bomb if we don't have an appropriate constructor
       val constructor = clazz.getConstructors.filter( _.getParameterTypes.length == constructorArgs.size).first      
       val constructorArgVals = for {

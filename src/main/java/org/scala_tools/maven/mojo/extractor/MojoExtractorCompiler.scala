@@ -138,7 +138,7 @@ trait MojoAnnotationExtractor extends CompilationUnits {
             annotation <- classDef.mods.annotations
             if annotation.tpe.safeToString == classOf[goal].getName
           } {
-            mojoInfos = parseMojoClass(pkgName, classDef) :: mojoInfos
+            mojoInfos = parseMojoClass(pkgName + pkgDef.name + ".", classDef) :: mojoInfos
           }
           case _ => //Ignore
         }

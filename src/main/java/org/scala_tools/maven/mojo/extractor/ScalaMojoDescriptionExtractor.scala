@@ -38,49 +38,4 @@ class ScalaMojoDescriptionExtractor extends MojoDescriptorExtractor {
         }
         java.util.Arrays.asList(mojoDescriptors : _*)
 	}
-	/**
-	 * Attempt to extract the mojo description from a particular file.
-	 * @param source
-	 * @param project
-	 * @param pluginDescriptor
-	 */
-	private def extractMojoDescription(source : String, project : MavenProject, pluginDescriptor : PluginDescriptor) : MojoDescriptor = {
-		try {
-			val descriptor = new MojoDescriptor();
-			//TODO - Pull this from inside the .scala file.
-			descriptor.setPluginDescriptor(pluginDescriptor);
-			//For now let's use a lame algorithm just to test to see if this will work.
-			descriptor.setDescription("Testing Scala extraction mojo");
-			descriptor.setGoal("echo");
-			descriptor.setExecuteGoal("echo");
-			descriptor.setExecutePhase("process-sources");
-			descriptor.setPhase("process-sources");
-			descriptor.setLanguage("scala");
-			descriptor.setComponentConfigurator("scala");
-			descriptor.setVersion(project.getModelVersion());
-			descriptor.setImplementation("org.scala_tools.mojo.TestMojo");
-	
-			
-			val parameter = new Parameter();
-			parameter.setName("outputDirectory");
-			parameter.setExpression("${project.build.directory}");
-			parameter.setType("java.io.File");
-			parameter.setRequired(true);            
-			descriptor.addParameter(parameter);
-   
-            val constructorArg = new Parameter()
-            constructorArg.setName("$$constructor$$1")
-            constructorArg.setExpression("${project.finalName}")
-            constructorArg.setType("java.lang.String")
-            constructorArg.setRequired(true)
-            constructorArg.setAlias("name")
-            descriptor.addParameter(constructorArg)
-   
-			System.err.println("Analyzing: " + source);		
-			descriptor;
-		} catch {
-		  case _ =>
-			return null;
-		}
-	}
 }

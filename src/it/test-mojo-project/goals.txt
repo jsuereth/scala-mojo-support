@@ -1,1 +1,1 @@
-clean package
+clean integration-test
