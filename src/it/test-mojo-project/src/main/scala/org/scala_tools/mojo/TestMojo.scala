@@ -3,6 +3,7 @@ package org.scala_tools.mojo
 import org.apache.maven.plugin._
 import java.io.File
 import org.scala_tools.maven.mojo.annotations._
+import org.apache.maven.project.MavenProject
 /**
  * Goal which echos "HAI"
  *
@@ -22,6 +23,10 @@ class TestMojo extends AbstractMojo {
   @expression("${project.build.directory}")
   var outputDirectory : File = _;
   
+  @parameter
+  @expression("${project}")
+  @readOnly
+  var project : MavenProject = _;
   
   
   @throws(classOf[MojoExecutionException])

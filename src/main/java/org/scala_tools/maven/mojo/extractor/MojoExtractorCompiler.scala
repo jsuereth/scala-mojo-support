@@ -75,28 +75,66 @@ trait MojoAnnotationExtractor extends CompilationUnits {
         new MojoAnnotationInfo(annotation.tpe.safeToString, argVals.toList)
       }
     }
-    
-    /** Pulls out mojo information froma mojo class */
-    def parseMojoClass(mojoClass : ClassDef) = {
-      
-      Console.println(" Found mojo class: " + mojoClass.name.toString)
-      //TODO - Pull out *FULL* Name
-      val info = new MojoClassInfo(mojoClass.name.toString)
-      
-      //TODO - Rip annotations from the class and add to MojoClassInfo
-      parseAnnotations(mojoClass.mods.annotations).foreach(info.annotation(_))
-      //TODO - Rip out annotated Var methods
-      for { node <- mojoClass.impl } {
-        
+    /** Pulls out information about all injectable variables based on mojo annotaitons. */
+    def parseMojoInjectedVars(classImpl : Tree) = {
+      for { node @ DefDef(mods,name,tparams,vparams,tpt,_) <- classImpl
+            if name.toString.endsWith("_$eq") //TODO - only var like setters? for now this is fine...
+            annotation <- mods.annotations
+            if annotation.tpe.safeToString == classOf[parameter].getName
+            argument @ ValDef(_,_,tpt,_) :: Nil <- vparams //setter should only have ONE argument!
+      } yield {
+        val argName = name.toString.slice(0, name.length - "_$eq".length)
+        //DO a real extraction of the type!
+        val argType = tpt.toString
+        val argAnnotations = parseAnnotations(mods.annotations)
+        new MojoInjectedVarInfo(argName,argType,argAnnotations)
       }
-      //TODO - Parse Parent classes
-      info
+    }    
+    /** Pulls out mojo information froma mojo class */
+    def parseMojoClass(pkgName : String, mojoClass : ClassDef) : MojoClassInfo = {
+      //Pull out *FULL* Name 
+      val mojoClassname = pkgName + mojoClass.name.toString
+      //Rip annotations from the class and add to MojoClassInfo
+      val mojoAnnotations = parseAnnotations(mojoClass.mods.annotations)
+      //Rip out annotated Var methods
+      val mojoArgs = parseMojoInjectedVars(mojoClass.impl)
+      //Parse Parent classes injectable arguments
+      //TODO - Make sure this works!  We're not sure if a parentclass is a ClassDef (most likely it's just a typeDef...)
+      val parentArgs = for { 
+        parentClass @ ClassDef(_,_,_,_) <- mojoClass.impl.parents        
+      } yield {
+        parseMojoInjectedVars(parentClass.impl)
+      }
+      //Combine all mojo injectable variables...
+      val finalArgs = parentArgs.foldLeft(mojoArgs)(_ ++ _)
+      new MojoClassInfo(mojoClassname, mojoAnnotations, finalArgs)
     }
-    //Find mojo classes
-    for { classDef @ ClassDef(mods,name,params, impl) <- body
-          annotation <- mods.annotations
-          if annotation.tpe.safeToString == classOf[goal].getName
-    } yield parseMojoClass(classDef)    
+    
+    var mojoInfos : List[MojoClassInfo] = List()
+    /** Parses down into packages... */
+    def parsePackage(pkgName : String, pkgDef : PackageDef) {
+      pkgDef.stats foreach { _ match {
+          case subPkgDef : PackageDef =>
+            parsePackage(pkgName + pkgDef.name + ".", subPkgDef)
+          //Find mojo classes
+          case classDef : ClassDef => for { 
+            annotation <- classDef.mods.annotations
+            if annotation.tpe.safeToString == classOf[goal].getName
+          } {
+            mojoInfos = parseMojoClass(pkgName, classDef) :: mojoInfos
+          }
+          case _ => //Ignore
+        }
+      }
+    }
+    //TODO - What do we do if top-level tree item is *NOT* a package?
+    body match {
+      case pkg : PackageDef => parsePackage("", pkg)
+      case classDef : ClassDef => parseMojoClass("", classDef)
+      case _ => Console.println("Error! Unexpected source file format for Scala Mojo Extractor");
+    }
+    
+    mojoInfos
   }
   
   /** Attempts to pull a static value from the given tree.
@@ -115,20 +153,4 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     //TODO - handle other values
     c.stringValue
   }
-}
-
-//Class information string
-class MojoClassInfo(val name : String) {
-  private[this] var annotations : List[MojoAnnotationInfo] = Nil
-  def annotation(name : MojoAnnotationInfo) {
-    annotations = name :: annotations
-  }
-  
-  def getAnnotations() = annotations
-  
-  override def toString = name + " - " + annotations.mkString("(",",",")")
-}
-
-class MojoAnnotationInfo(val name : String, val args : List[String]) {
-  override def toString = name + args.mkString("(",",",")")
 }
