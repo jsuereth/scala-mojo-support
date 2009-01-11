@@ -6,9 +6,12 @@
 		<artifactId>scala-tools-parent</artifactId>
 		<version>1.4</version>
 	</parent>
+	<properties>
+		<scala.version>2.7.2</scala.version>
+	</properties>
 	<artifactId>scala-mojo-support</artifactId>
 	<packaging>jar</packaging>
-	<version>2.9-SNAPSHOT</version>
+	<version>0.1-${scala.version}-SNAPSHOT</version>
 	<name>Scala Mojo Support</name>
 	<description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
 
@@ -37,7 +40,7 @@
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-compiler</artifactId>
-			<version>2.7.2</version>
+			<version>${scala.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
