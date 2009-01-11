@@ -17,6 +17,7 @@ class alias(value : String) extends StaticAnnotation
 /** Injects a plexus component */
 class component(role : String, roleHint : Option[String]) extends StaticAnnotation
 
+//TODO - Support default values!
 
 
 //Annotations for Mojos

@@ -10,7 +10,7 @@ import org.apache.maven.plugin.descriptor.PluginDescriptor;
 
 import mojo.util.MavenProjectTools
 
-class MojoExtractorCompiler(project : MavenProject) extends MavenProjectTools{
+class MojoExtractorCompiler(project : MavenProject) extends MavenProjectTools with MojoExtractionInfo {
   //Method to extract mojo description from a source file.
   def extract(sourceFiles : String*) : Seq[MojoDescriptor] = {
       //helper method to initialize settings
@@ -30,25 +30,26 @@ class MojoExtractorCompiler(project : MavenProject) extends MavenProjectTools{
 	      val run = new compiler.Run
 	      run.compile(sourceFiles.toList)       
           //Extract mojo description
-          def extractMojos(unit : compiler.CompilationUnit) {
+          def extractMojos(unit : compiler.CompilationUnit) = {
             import compiler._
-            for(info <- compiler.parseCompilationUnitBody(unit.body)) {
+            for(info <- compiler.parseCompilationUnitBody(unit.body)) yield {
               Console.println(info)
+              extractMojoDescriptor(info)
             }
           }
-          for(unit <- run.units if !unit.isJava) {
+          for(unit <- run.units if !unit.isJava) yield {
             extractMojos(unit)
           }
-          Nil
 	  }
       
     val (settings, reporter) = initialize    
     val classpath = getCompileClasspathString(project)
     System.err.println("Classpath = " + classpath)
-    settings.classpath.tryToSet("-classpath" :: classpath :: Nil)
-    execute(settings, reporter)
+    settings.classpath.tryToSet("-classpath" :: classpath :: Nil)    
+    execute(settings, reporter).toList.flatMap(x=>x)
   } 
 }
+
 
 import scala.tools.nsc.ast._
 import scala.tools.nsc.symtab.{Flags, SymbolTable}
@@ -58,6 +59,16 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     
   /** Pulls all mojo classes out of the body of source code. */
   def parseCompilationUnitBody(body : Tree) = {
+    /** Pulls the name of the parent class */
+    def pullParentClassName(parent : Tree) = {
+      parent match {
+        case Select(qualifier,selector) =>
+          parent.toString
+        case t @ TypeTree() =>  t.tpe.safeToString
+        case _ => //TODO - error out? 
+           ""
+      }
+    }
     /** Parses a list of annotations into a list of MojoAnnotationInfo classes */
     def parseAnnotations(annotations : List[Annotation]) = {
       for {
@@ -100,6 +111,12 @@ trait MojoAnnotationExtractor extends CompilationUnits {
       val mojoArgs = parseMojoInjectedVars(mojoClass.impl)
       //Parse Parent classes injectable arguments
       //TODO - Make sure this works!  We're not sure if a parentclass is a ClassDef (most likely it's just a typeDef...)
+      for(parent <- mojoClass.impl.parents) {        
+        val parentClassName = pullParentClassName(parent)
+        Console.println(mojoClassname + " has parent " + parentClassName)
+        ()
+      }  
+        
       val parentArgs = for { 
         parentClass @ ClassDef(_,_,_,_) <- mojoClass.impl.parents        
       } yield {

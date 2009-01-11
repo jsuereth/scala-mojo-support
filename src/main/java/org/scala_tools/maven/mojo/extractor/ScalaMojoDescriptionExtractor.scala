@@ -31,6 +31,11 @@ class ScalaMojoDescriptionExtractor extends MojoDescriptorExtractor {
          
         val compiler = new MojoExtractorCompiler(project)
         val mojoDescriptors = compiler.extract(sourceFiles : _*).toArray
+        for(mojoDescriptor <- mojoDescriptors) {
+          mojoDescriptor.setPluginDescriptor(pluginDescriptor)
+          mojoDescriptor.setVersion(project.getModelVersion());
+          mojoDescriptor.setLanguage("scala")
+        }
         java.util.Arrays.asList(mojoDescriptors : _*)
 	}
 	/**
