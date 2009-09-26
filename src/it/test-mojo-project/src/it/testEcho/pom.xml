@@ -11,7 +11,7 @@
 			<plugin>
 				<groupId>org.scala-tools</groupId>
 				<artifactId>test-scala-plugin</artifactId>
-				<version>testing</version>
+				<version>@project.version@</version>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,7 +1,7 @@
 package org.scala_tools.mojo
 
 import org.apache.maven.plugin._
-import java.io.File
+import java.io.{File,PrintStream,FileOutputStream}
 import org.scala_tools.maven.mojo.annotations._
 import org.apache.maven.project.MavenProject
 /**
@@ -31,7 +31,14 @@ class TestMojo extends AbstractMojo {
   
   @throws(classOf[MojoExecutionException])
   override def execute() {
-    getLog.error("HAI")
-    getLog.error("outputDirectory = " + outputDirectory);//.getAbsolutePath);
+    if(!outputDirectory.exists) {
+       outputDirectory.mkdirs()
+    }
+    val file = new File(outputDirectory, "echo.txt")
+    val output = new PrintStream(new FileOutputStream(file))
+    
+    output.println("HAI")
+    output.close()
+    
   }
 }

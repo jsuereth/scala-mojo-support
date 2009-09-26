@@ -1,17 +1,16 @@
-def echoString = "OUT: [ERROR] HAI"
-def outputDirectoryIsBadString = "OUT: [ERROR] outputDirectory = null"
-def logFile = new File(basedir, "build.log")
+def echoString = "HAI"
+def logFile = new File(basedir, "target/echo.txt")
 //Look for echo string
 def found = false;
-def outputDirectoryIsBad = false;
+
+System.out.println("Logfile = " + logFile)
+
 logFile.eachLine({ line ->
+   System.out.println("Checking line: " + line)
    if(line.startsWith(echoString)) {
    	 found = true;
-   }
-   if(line.startsWith(outputDirectoryIsBadString)) {
-   	outputDirectoryIsBad = true;
    }
 });
 
 assert found
-assert !outputDirectoryIsBad
+true

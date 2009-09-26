@@ -8,4 +8,6 @@ class DummyScalaMojo {
   var dummyVar : String = _
   @parameter
   var otherVar : Int = _
+  
+  
 }
