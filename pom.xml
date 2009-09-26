@@ -9,9 +9,9 @@
 	<properties>
 		<scala.version>2.7.5</scala.version>
 	</properties>
-	<artifactId>scala-mojo-support</artifactId>
+	<artifactId>scala-mojo-support-${scala.version}</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-${scala.version}-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<name>Scala Mojo Support</name>
 	<description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
 
