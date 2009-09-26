@@ -9,7 +9,7 @@
 	<properties>
 		<scala.version>2.7.5</scala.version>
 	</properties>
-	<artifactId>scala-mojo-support-${scala.version}</artifactId>
+	<artifactId>scala-mojo-support</artifactId>
 	<packaging>jar</packaging>
 	<version>0.1-SNAPSHOT</version>
 	<name>Scala Mojo Support</name>
