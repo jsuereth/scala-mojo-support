@@ -16,16 +16,17 @@ class MojoExtractorCompiler(project : MavenProject) extends MavenProjectTools wi
       //helper method to initialize settings
 	  def initialize : (Settings, Reporter) = {
 	    val settings = new Settings();
-        //TODO - Set settings
-        val reporter = new ConsoleReporter(settings);
-	    (settings,reporter)
-	  }
+            //TODO - Set settings
+            settings.stop.tryToSet(List("typer"))
+            val reporter = new ConsoleReporter(settings);
+	      (settings,reporter)
+	    }
    
       
 	  //helper method to execute presentation compiler
 	  def execute(settings : Settings, reporter : Reporter) = {
 		  val compiler = new Global(settings, reporter) with MojoAnnotationExtractor {
-		    override def onlyPresentation = true
+		    //override def onlyPresentation = true
 		  }
 	      val run = new compiler.Run
 	      run.compile(sourceFiles.toList)       
