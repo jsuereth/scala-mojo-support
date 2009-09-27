@@ -111,9 +111,9 @@ trait MojoAnnotationExtractor extends CompilationUnits {
       }
     }    
     /** Pulls out mojo information froma mojo class */
-    def parseMojoClass(pkgName : String, mojoClass : ClassDef) : MojoClassInfo = {
+    def parseMojoClass(mojoClass : ClassDef) : MojoClassInfo = {
       //Pull out *FULL* Name 
-      val mojoClassname = pkgName + mojoClass.name.toString
+      val mojoClassname = mojoClass.symbol.tpe.safeToString
       //Rip annotations from the class and add to MojoClassInfo
       val mojoAnnotations = parseAnnotations(mojoClass.mods.annotations)
       //Rip out annotated Var methods
@@ -131,28 +131,15 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     }
     
     var mojoInfos : List[MojoClassInfo] = List()
-    /** Parses down into packages... */
-    def parsePackage(pkgName : String, pkgDef : PackageDef) {
-      pkgDef.stats foreach { _ match {
-          case subPkgDef : PackageDef =>
-            parsePackage(pkgName + pkgDef.name + ".", subPkgDef)
-          //Find mojo classes
-          case classDef : ClassDef => for { 
-            annotation <- classDef.mods.annotations
-            if annotation.tpe.safeToString == classOf[goal].getName
-          } {
-            mojoInfos = parseMojoClass(pkgName + pkgDef.name + ".", classDef) :: mojoInfos
-          }
-          case _ => //Ignore
+
+    body.filter(_.isInstanceOf[ClassDef]).foreach {
+      x =>
+        val classDef = x.asInstanceOf[ClassDef]
+      	val annotations = classDef.mods.annotations
+        annotations.filter(_.tpe.safeToString == classOf[goal].getName).foreach { a =>
+          mojoInfos = parseMojoClass(classDef) :: mojoInfos
         }
-      }
-    }
-    //TODO - What do we do if top-level tree item is *NOT* a package?
-    body match {
-      case pkg : PackageDef => parsePackage("", pkg)
-      case classDef : ClassDef => parseMojoClass("", classDef)
-      case _ => Console.println("Error! Unexpected source file format for Scala Mojo Extractor");
-    }
+    }    
     
     mojoInfos
   }
