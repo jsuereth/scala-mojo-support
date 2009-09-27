@@ -55,6 +55,12 @@
 			<url>http://scala-tools.org/repo-releases</url>
 		</repository>
 	</repositories>
+	<licenses>
+		<license>
+			<name>BSD</name>
+			<url>http://www.opensource.org/licenses/bsd-license.html</url>
+		</license>
+	</licenses>
 	<build>
 		<plugins>
 			<plugin>
