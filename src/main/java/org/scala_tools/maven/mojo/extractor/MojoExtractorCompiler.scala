@@ -60,16 +60,24 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     
   /** Pulls all mojo classes out of the body of source code. */
   def parseCompilationUnitBody(body : Tree) = {
-    /** Pulls the name of the parent class */
-    def pullParentClassName(parent : Tree) = {
-      parent match {
-        case Select(qualifier,selector) =>
-          parent.toString
-        case t @ TypeTree() =>  t.tpe.safeToString
-        case _ => //TODO - error out? 
-           ""
+    
+    /** Slow method to go look for the definition of a parent class */
+    def pullParentClass(symbol : Symbol) = {
+      currentRun.units.toList.flatMap { unit =>         
+        val x = unit.body.filter(_.isInstanceOf[ClassDef]).find( _.symbol == symbol).map(_.asInstanceOf[ClassDef])
+        x
       }
     }
+    
+    /** Pulls the name of the parent class */
+    def pullParentClassSymbol(parent : Tree) = {
+      parent match {
+        case t @ TypeTree() =>  Some(t.symbol)
+        case _ => None
+      }
+    }
+    
+    
     /** Parses a list of annotations into a list of MojoAnnotationInfo classes */
     def parseAnnotations(annotations : List[Annotation]) = {
       for {
@@ -110,21 +118,15 @@ trait MojoAnnotationExtractor extends CompilationUnits {
       val mojoAnnotations = parseAnnotations(mojoClass.mods.annotations)
       //Rip out annotated Var methods
       val mojoArgs = parseMojoInjectedVars(mojoClass.impl)
-      //Parse Parent classes injectable arguments
-      //TODO - Make sure this works!  We're not sure if a parentclass is a ClassDef (most likely it's just a typeDef...)
-      for(parent <- mojoClass.impl.parents) {        
-        val parentClassName = pullParentClassName(parent)
-        Console.println(mojoClassname + " has parent " + parentClassName)
-        ()
-      }  
-        
-      val parentArgs = for { 
-        parentClass @ ClassDef(_,_,_,_) <- mojoClass.impl.parents        
-      } yield {
-        parseMojoInjectedVars(parentClass.impl)
-      }
+      
+      val parentSymbols = mojoClass.impl.parents.toList.flatMap(pullParentClassSymbol)
+      val parentClasses = parentSymbols.flatMap(pullParentClass)
+      
+      
+      val parentArgs = parentClasses.flatMap( x => parseMojoInjectedVars(x.impl))
+
       //Combine all mojo injectable variables...
-      val finalArgs = parentArgs.foldLeft(mojoArgs)(_ ++ _)
+      val finalArgs = mojoArgs ++ parentArgs
       new MojoClassInfo(mojoClassname, mojoAnnotations, finalArgs)
     }
     
