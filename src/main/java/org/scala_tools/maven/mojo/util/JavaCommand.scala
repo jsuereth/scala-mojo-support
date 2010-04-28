@@ -6,7 +6,7 @@ import java.net.URLClassLoader
 import java.net.URL
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoFailureException
-import scala.collection.jcl.Conversions._
+import scala.collection.JavaConversions._
 
 /**
  * Class used to start a java process.

@@ -1,18 +1,13 @@
 package org.scala_tools.maven.mojo.extractor
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.maven.plugin.descriptor.InvalidPluginDescriptorException;
-import org.apache.maven.plugin.descriptor.MojoDescriptor;
-import org.apache.maven.plugin.descriptor.Parameter;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.tools.plugin.extractor.ExtractionException;
 import org.apache.maven.tools.plugin.extractor.MojoDescriptorExtractor;
 import org.apache.maven.tools.plugin.util.PluginUtils;
 
-import scala.collection.jcl.Conversions._
+import scala.collection.JavaConversions._
+
 /**
  * This class is responsible for extracting mojo descriptions from scala files.
  */

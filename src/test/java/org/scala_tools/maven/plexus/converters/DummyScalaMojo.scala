@@ -1,6 +1,6 @@
 package org.scala_tools.maven.plexus.converters
 
-import mojo.annotations._
+import org.scala_tools.maven.mojo.annotations._
 
 @goal("dummy") @phase("compile") @requiresDependencyResolution("compile")
 class DummyScalaMojo {

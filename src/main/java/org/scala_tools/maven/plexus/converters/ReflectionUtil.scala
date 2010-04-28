@@ -1,6 +1,6 @@
 package org.scala_tools.maven.plexus.converters
 
-import scala.collection.jcl.Conversions._
+import scala.collection.JavaConversions._
 
 object ReflectionUtil {
   

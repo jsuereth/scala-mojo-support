@@ -18,7 +18,8 @@ object Resource {
 import java.io._
 object RichBufferedReader {
   implicit def pimpBufferedReader(reader : BufferedReader) = new Iterable[String] {
-    def elements = new BufferedReaderIterator(reader)
+    override def elements = new BufferedReaderIterator(reader)
+    def iterator = elements
   }
 }
 

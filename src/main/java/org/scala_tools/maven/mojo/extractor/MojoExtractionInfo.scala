@@ -1,9 +1,10 @@
 package org.scala_tools.maven.mojo.extractor
 
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.plugin.descriptor.InvalidPluginDescriptorException;
-import org.apache.maven.plugin.descriptor.MojoDescriptor;
-import org.apache.maven.plugin.descriptor.Parameter;
+import org.apache.maven.project.MavenProject
+import org.apache.maven.plugin.descriptor.InvalidPluginDescriptorException
+import org.apache.maven.plugin.descriptor.MojoDescriptor
+import org.apache.maven.plugin.descriptor.Parameter
+import org.scala_tools.maven.mojo.annotations._;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
 
 /**
@@ -11,48 +12,49 @@ import org.apache.maven.plugin.descriptor.PluginDescriptor;
  */
 trait MojoExtractionInfo {
   def extractMojoDescriptor(mojoInfo : MojoClassInfo) : MojoDescriptor = {
+    println("TRACER: extracting mojo info = " + mojoInfo)
     val desc = new MojoDescriptor()
     desc.setLanguage("scala");
     desc.setComponentConfigurator("scala");
     desc.setImplementation(mojoInfo.name)
     // Add mojo annotations
     for(annotation <- mojoInfo.annotations) {
-      annotation.name.substring("org.scala_tools.maven.mojo.annotations.".length) match {
-        case "goal" =>
-          desc.setGoal(annotation.args(0))
-          desc.setExecuteGoal(annotation.args(0))
-        case "phase" =>
-          desc.setPhase(annotation.args(0))
-          desc.setExecutePhase(annotation.args(0))
-        case "configurator" =>
-          desc.setComponentConfigurator(annotation.args(0))
-        case "executeGoal" =>
-          desc.setExecuteGoal(annotation.args(0))
-        case "executePhase" =>
-          desc.setExecutePhase(annotation.args(0))
-        case "executePhaseInLifecycle" =>
-          desc.setExecutePhase(annotation.args(0))
-          desc.setExecuteLifecycle(annotation.args(0))
-        case "executionStrategy" =>
+      annotation match {
+        case goal(name) =>
+          desc.setGoal(name)
+          desc.setExecuteGoal(name)
+        case phase(name) =>
+          desc.setPhase(name)
+          desc.setExecutePhase(name)
+        case configurator(roleHint) =>
+          desc.setComponentConfigurator(roleHint)
+        case executeGoal(value) =>
+          desc.setExecuteGoal(value)
+        case executePhase(value) =>
+          desc.setExecutePhase(value)
+        case executePhaseInLifecycle(phase, lifeCycle) =>
+          desc.setExecutePhase(phase)
+          desc.setExecuteLifecycle(lifeCycle)
+//        case executionStrategy =>
           //TODO -= Figure this one out
-        case "inheritByDefault" =>
-          desc.setInheritedByDefault(annotation.args(0).toBoolean)
-        case "instantiationStrategy" =>
-          desc.setInstantiationStrategy(annotation.args(0))
-        case "requiresDependencyResolution" =>
-          desc.setDependencyResolutionRequired(annotation.args(0))
-        case "requiresDirectInvocation" =>
-          desc.setDirectInvocationOnly(annotation.args(0).toBoolean)
-        case "requiresOnline" =>
-          desc.setOnlineRequired(annotation.args(0).toBoolean)
-        case "requiresProject" =>
-          desc.setProjectRequired(annotation.args(0).toBoolean)
-        case "requiresReports" =>
-          desc.setRequiresReports(annotation.args(0).toBoolean)
-        case "description" =>
-          desc.setDescription(annotation.args(0))
-        case "since" =>
-          desc.setSince(annotation.args(0))
+        case inheritByDefault(value) =>
+          desc.setInheritedByDefault(value)
+        case instantiationStrategy(value) =>
+          desc.setInstantiationStrategy(value)
+        case requiresDependencyResolution(scope) =>
+          desc.setDependencyResolutionRequired(scope)
+        case requiresDirectInvocation(value) =>
+          desc.setDirectInvocationOnly(value)
+        case requiresOnline(value) =>
+          desc.setOnlineRequired(value)
+        case requiresProject(value) =>
+          desc.setProjectRequired(value)
+        case requiresReports(value) =>
+          desc.setRequiresReports(value)
+        case description(value) =>
+          desc.setDescription(value)
+        case since(value) =>
+          desc.setSince(value)
         case _ => //ignore
       }
     }
@@ -63,17 +65,15 @@ trait MojoExtractionInfo {
       paramInfo.setType(param.typeClass)
       //TODO - Set implementation to type?
       for(annotation <- param.annotations) {
-        annotation.name.substring("org.scala_tools.maven.mojo.annotations.".length) match {
-          case "required" => paramInfo.setRequired(true)
-          case "readOnly" => paramInfo.setEditable(false)
-          case "expression" => paramInfo.setExpression(annotation.args(0))
-          case "alias" => paramInfo.setAlias(annotation.args(0))
-          case "component" => 
+        annotation match {
+          case required() => paramInfo.setRequired(true)
+          case readOnly() => paramInfo.setEditable(false)
+          case expression(value) => paramInfo.setExpression(value)
+          case alias(value) => paramInfo.setAlias(value)
+//          case component =>
             //TODO Add requirement            
-          case "description" =>
-            paramInfo.setDeprecated(annotation.args(0))
-          case "since" =>
-            paramInfo.setSince(annotation.args(0))
+          case description(value) => paramInfo.setDeprecated(value)
+          case since(value) => paramInfo.setSince(value)
           case _ => //Ignore
         }
       } 
@@ -88,14 +88,6 @@ trait MojoExtractionInfo {
 
 
 //Class information string
-class MojoClassInfo(val name : String, val annotations : List[MojoAnnotationInfo], val parameters : List[MojoInjectedVarInfo]) {
-  override def toString = name + " - " + annotations.mkString("(",",",")") + "\nwithArgs " + parameters.mkString("\n","\n","")
-}
+case class MojoClassInfo(name: String, annotations: List[MavenAnnotation], parameters: List[MojoInjectedVarInfo])
 
-class MojoInjectedVarInfo(val name : String, val typeClass : String, val annotations : List[MojoAnnotationInfo]) {
-  override def toString = name + " : " + typeClass + " - " + annotations.mkString("(",",",")")
-}
-
-class MojoAnnotationInfo(val name : String, val args : List[String]) {
-  override def toString = name + args.mkString("(",",",")")
-}
+case class MojoInjectedVarInfo(name: String, typeClass: String, annotations : List[MavenAnnotation])

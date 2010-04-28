@@ -1,7 +1,7 @@
 package org.scala_tools.maven.mojo.util
 
 import org.apache.maven.project.MavenProject;
-import collection.jcl.Conversions._
+import collection.JavaConversions._
 import java.io.File
 
 /**
