@@ -34,3 +34,7 @@ test-output
 #SHITTY output not in target directory
 build.log
 
+# IntelliJ files
+.idea
+*.iml
+
