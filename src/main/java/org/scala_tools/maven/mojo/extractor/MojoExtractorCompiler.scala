@@ -3,7 +3,6 @@ package org.scala_tools.maven.mojo.extractor
 import scala.tools.nsc._
 import scala.tools.nsc.reporters._
 import org.apache.maven.project.MavenProject
-import org.scala_tools.maven.mojo.annotations.goal;
 
 import org.apache.maven.plugin.descriptor.MojoDescriptor;
 
@@ -39,7 +38,6 @@ class MojoExtractorCompiler(project: MavenProject) extends MavenProjectTools wit
       }
 
       val run = new compiler.Run
-      println("TRACER : compiling: " + sourceFiles.toList)
       run.compile(sourceFiles.toList)
 
       for (unit <- run.units if !unit.isJava) yield {
@@ -52,9 +50,6 @@ class MojoExtractorCompiler(project: MavenProject) extends MavenProjectTools wit
   }
 }
 
-
-import scala.tools.nsc.ast._
-import scala.tools.nsc.symtab.{Flags, SymbolTable}
 import org.scala_tools.maven.mojo.annotations._
 
 trait MojoAnnotationExtractor extends CompilationUnits {
@@ -81,26 +76,30 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     }
 
     object string {
-      private val stringClass = classOf[String].getCanonicalName
-
       def unapply(tree: Tree) = {
-        println("TRACER: extracting strning: " + tree.tpe.widen + " === " + stringClass)
-        tree.tpe.widen.toString match {
-          case `stringClass` => Some(tree.toString)
+        tree match {
+          case Literal(constant) => constant.tag match {
+            case StringTag => Some(constant.stringValue)
+            case _ => None
+          }
           case _ => None 
         }
       }
     }
 
     object boolean {
-      private val TRUE = classOf[String].getCanonicalName + "(true)"
-      private val FALSE = classOf[String].getCanonicalName + "(false)"
-
       def unapply(tree: Tree) = {
-        println("TRACER: extracting strning: " + tree.tpe.toString + " === " + TRUE)
-        tree.tpe.toString match {
-          case TRUE => Some(true)
-          case FALSE => Some(false)
+        tree match {
+          case Literal(constant) => constant.tag match {
+            case BooleanTag => Some(constant.booleanValue)
+            case _ => None
+          }
+          // In case a default value was used, this will ignore the value and use true. 
+          case sel@Select(_, _) =>
+            sel.tpe.toString match {
+              case "Boolean" => Some(true)
+              case _ => None
+            }
           case _ => None
         }
       }
@@ -109,20 +108,12 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     /**Parses a list of annotations into a list of MojoAnnotationInfo classes */
     def parseAnnotations(annotations: List[AnnotationInfo]) = {
       for(annotation <- annotations) yield {
-        // TODO - In the future the second arg to Annotation may be needed... (as it's what's inside the
-        // anonymous instantiation of an annotatioin, i.e. @xyz {}
-        //TODO - Do we need to match on constructor?
         annotation.args match {
           case Nil => MavenAnnotation(annotation.atp.safeToString)
-//          case value1 :: Nil => MavenAnnotation(annotation.atp.safeToString, value1)
-//          case value1 :: value2 :: Nil => MavenAnnotation(annotation.atp.safeToString, value1, value2)
-//          case _ => new IllegalArgumentException("Found unsupported annotation (%s)".format(annotation.atp.safeToString))
-            case string(value) :: Nil => MavenAnnotation(annotation.atp.safeToString, value)
-            case boolean(value) :: Nil => MavenAnnotation(annotation.atp.safeToString, value)
-            case string(value1) :: string(value2) :: Nil => MavenAnnotation(annotation.atp.safeToString, value1, value2)
-            case x =>
-              println("TRACER: Arguments: " + x)
-              MavenAnnotation(annotation.atp.safeToString)
+          case string(value) :: Nil => MavenAnnotation(annotation.atp.safeToString, value)
+          case boolean(value) :: Nil => MavenAnnotation(annotation.atp.safeToString, value)
+          case string(value1) :: string(value2) :: Nil => MavenAnnotation(annotation.atp.safeToString, value1, value2)
+          case x => throw new IllegalArgumentException("Annotation (%s) is not supported".format(annotation))
         }
       }
     }
@@ -130,10 +121,8 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     /**Pulls out information about all injectable variables based on mojo annotaitons. */
     def parseMojoInjectedVars(classImpl: Tree) = {
       for{node@ValDef(_, name, tpt, _) <- classImpl.children
-//          if name.toString.endsWith("_$eq") //TODO - only var like setters? for now this is fine...
           annotation <- node.symbol.annotations
           if annotation.atp.safeToString == classOf[parameter].getName
-//          argument@ValDef(_, _, tpt, _) :: Nil <- vparams //setter should only have ONE argument!
       } yield {
         val varInfo = new MojoInjectedVarInfo(name.toString, tpt.toString, parseAnnotations(node.symbol.annotations))
         varInfo
@@ -159,12 +148,10 @@ trait MojoAnnotationExtractor extends CompilationUnits {
         //Combine all mojo injectable variables...
         val finalArgs = args ++ parentArgs
         val mojoInfo = new MojoClassInfo(name, annotations, finalArgs)
-        println("TRACER: Extracted: " + mojoInfo)
         mojoInfo
     }
 
     var mojoInfos: List[MojoClassInfo] = List()
-
 
     body.foreach {
       x =>
@@ -175,7 +162,6 @@ trait MojoAnnotationExtractor extends CompilationUnits {
         }
     }
 
-//    println(mojoInfos)
     mojoInfos
   }
 

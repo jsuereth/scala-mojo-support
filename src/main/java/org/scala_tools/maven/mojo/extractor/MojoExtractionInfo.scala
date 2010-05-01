@@ -10,7 +10,6 @@ import org.scala_tools.maven.mojo.annotations._;
  */
 trait MojoExtractionInfo {
   def extractMojoDescriptor(mojoInfo : MojoClassInfo) : MojoDescriptor = {
-    println("TRACER: extracting mojo info = " + mojoInfo)
     val desc = new MojoDescriptor()
     desc.setLanguage("scala");
     desc.setComponentConfigurator("scala");

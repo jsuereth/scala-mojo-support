@@ -133,7 +133,7 @@ case class since(value : String) extends MavenAnnotation
 
 case class inheritByDefault(value : Boolean)	extends MavenAnnotation
 case class requiresOnline(value : Boolean) extends MavenAnnotation
-case class requiresProject(value : Boolean) extends MavenAnnotation
+case class requiresProject(value : Boolean = true) extends MavenAnnotation
 case class requiresReports(value : Boolean) extends MavenAnnotation
 case class requiresDirectInvocation(value : Boolean) extends MavenAnnotation
 
