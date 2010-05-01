@@ -95,9 +95,8 @@
             <arg>-no-specialization</arg>
             <arg>-deprecation</arg>
             <!--<arg>-Ystop:erasure</arg>-->
-
-              <!--<arg>-Xprint:typer</arg>-->
-              <!--<arg>-explaintypes</arg>-->
+            <!--<arg>-Xprint:typer</arg>-->
+            <!--<arg>-explaintypes</arg>-->
           </args>
         </configuration>
       </plugin>

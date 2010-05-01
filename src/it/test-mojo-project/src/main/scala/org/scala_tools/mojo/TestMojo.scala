@@ -4,15 +4,13 @@ import org.apache.maven.plugin._
 import java.io.{File,PrintStream,FileOutputStream}
 import org.scala_tools.maven.mojo.annotations._
 import org.apache.maven.project.MavenProject
+
 /**
  * Goal which echos "HAI"
- *
- * @goal echo
- * 
- * @phase process-sources
  */
 @goal("echo")
 @phase("process-sources")
+@requiresProject
 class TestMojo extends AbstractMojo {
   /**
    * Location of the file.
