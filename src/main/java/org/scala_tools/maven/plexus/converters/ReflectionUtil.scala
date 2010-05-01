@@ -1,7 +1,5 @@
 package org.scala_tools.maven.plexus.converters
 
-import scala.collection.JavaConversions._
-
 object ReflectionUtil {
   
   /**
@@ -20,7 +18,7 @@ object ReflectionUtil {
     val potentials = for { method <- obj.getClass.getMethods
          if varName.equals(method.getName) && method.getParameterTypes.size == 0
     } yield method.getReturnType
-    potentials.firstOption
+    potentials.headOption
   }
   
   private def getVarSetMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] = {
@@ -28,7 +26,7 @@ object ReflectionUtil {
     val methods = for { method <- obj.getClass.getMethods 
         if varSetterName.equals(method.getName)
     } yield method
-    methods.firstOption
+    methods.headOption
   }
 	/**
 	 * This method will inject a value into a "var" on a scala object.
@@ -44,7 +42,7 @@ object ReflectionUtil {
   def injectIntoVar[A <: AnyRef](obj : AnyRef, varName : String, value : A) {
     getVarSetMethod(obj, varName) match {
       case Some(method) =>
-        val varType = method.getParameterTypes.first
+        val varType = method.getParameterTypes.head
         val realClass = value.getClass
         if(!varType.isAssignableFrom(realClass)) {
           throw new IllegalArgumentException("Can not coerce: " + realClass + " into a " + varType);

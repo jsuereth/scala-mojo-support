@@ -1,11 +1,9 @@
 package org.scala_tools.maven.mojo.extractor
 
-import org.apache.maven.project.MavenProject
-import org.apache.maven.plugin.descriptor.InvalidPluginDescriptorException
 import org.apache.maven.plugin.descriptor.MojoDescriptor
 import org.apache.maven.plugin.descriptor.Parameter
 import org.scala_tools.maven.mojo.annotations._;
-import org.apache.maven.plugin.descriptor.PluginDescriptor;
+
 
 /**
  * Helper class that can extract a MojoDescriptor from a MojoClassInfo object.
@@ -35,8 +33,8 @@ trait MojoExtractionInfo {
         case executePhaseInLifecycle(phase, lifeCycle) =>
           desc.setExecutePhase(phase)
           desc.setExecuteLifecycle(lifeCycle)
+        //TODO -= Figure this one out
 //        case executionStrategy =>
-          //TODO -= Figure this one out
         case inheritByDefault(value) =>
           desc.setInheritedByDefault(value)
         case instantiationStrategy(value) =>
@@ -70,8 +68,8 @@ trait MojoExtractionInfo {
           case readOnly() => paramInfo.setEditable(false)
           case expression(value) => paramInfo.setExpression(value)
           case alias(value) => paramInfo.setAlias(value)
+          //TODO Add requirement
 //          case component =>
-            //TODO Add requirement            
           case description(value) => paramInfo.setDeprecated(value)
           case since(value) => paramInfo.setSince(value)
           case _ => //Ignore
