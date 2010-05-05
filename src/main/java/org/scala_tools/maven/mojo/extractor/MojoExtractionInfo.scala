@@ -69,7 +69,9 @@ trait MojoExtractionInfo {
           case alias(value) => paramInfo.setAlias(value)
           //TODO Add requirement
 //          case component =>
-          case description(value) => paramInfo.setDeprecated(value)
+          case description(value) => paramInfo.setDescription(value)
+          //TODO Add deprecated support
+//          case deprecated =>
           case since(value) => paramInfo.setSince(value)
           case _ => //Ignore
         }
