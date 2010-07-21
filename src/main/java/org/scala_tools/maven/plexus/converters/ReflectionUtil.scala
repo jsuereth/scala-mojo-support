@@ -15,19 +15,21 @@ object ReflectionUtil {
 	 *             The type of the var, or None if no var is found
 	 */
   def getVarType(obj : AnyRef, varName : String) : Option[Class[_]] = {
-    val potentials = for { method <- obj.getClass.getMethods
-         if varName.equals(method.getName) && method.getParameterTypes.size == 0
-    } yield method.getReturnType
-    potentials.headOption
+    val method = getMethod(obj, varName)
+    method.map(_.getReturnType)
   }
   
-  private def getVarSetMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] = {
-    val varSetterName = varName + "_$eq";
-    val methods = for { method <- obj.getClass.getMethods 
-        if varSetterName.equals(method.getName)
-    } yield method
-    methods.headOption
+  private def getMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] = {
+    (for{
+      m <- obj.getClass.getMethods
+      if m.getName == varName
+    } yield m).headOption
   }
+
+  private def getVarSetMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] = {
+    getMethod(obj, varName + "_$eq")
+  }
+
 	/**
 	 * This method will inject a value into a "var" on a scala object.
 	 * @param obj

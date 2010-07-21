@@ -4,7 +4,7 @@
 	<groupId>org.scala-tools</groupId>
 	<artifactId>testEcho</artifactId>
 	<packaging>pom</packaging>
-	<version>0.2-SNAPSHOT</version>
+	<version>@project.version@</version>
 
     <name>test-scala-plugin Maven Mojo execution</name>
 	<build>
