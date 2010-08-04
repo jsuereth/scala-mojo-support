@@ -11,9 +11,11 @@ import org.codehaus.plexus.configuration.PlexusConfiguration;
  * This class is used to instantiate new components in plexus
  */
 class ScalaComponentFactory extends AbstractComponentFactory {
-  
+
+  override def getId = "scala-component-factory"
+
   //Override "newInstance" method.  Note: AnyRef = java.lang.Object
-  override def newInstance(componentDescriptor : ComponentDescriptor, 
+  override def newInstance(componentDescriptor : ComponentDescriptor[_], 
                            classRealm : ClassRealm, 
                            container : PlexusContainer ) : AnyRef = {
     //Helper method to load  a scala class from our "realm"
