@@ -1,11 +1,11 @@
 package org.scala_tools.maven.plexus
 
-import org.codehaus.classworlds.ClassRealm;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.configurator.ComponentConfigurationException;
 import org.codehaus.plexus.component.factory.AbstractComponentFactory;
 import org.codehaus.plexus.component.repository.ComponentDescriptor;
 import org.codehaus.plexus.configuration.PlexusConfiguration;
+import org.codehaus.plexus.classworlds.realm.ClassRealm
 
 /**
  * This class is used to instantiate new components in plexus

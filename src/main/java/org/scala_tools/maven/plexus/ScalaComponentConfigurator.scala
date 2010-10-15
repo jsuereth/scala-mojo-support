@@ -14,19 +14,25 @@ import org.codehaus.plexus.classworlds.realm.ClassRealm
 class ScalaComponentConfigurator extends AbstractComponentConfigurator {
 
   @throws(classOf[ComponentConfigurationException])
-  override def configureComponent(component : AnyRef,
-		                              configuration : PlexusConfiguration ,
-			                            expressionEvaluator : ExpressionEvaluator,
-                                  containerRealm : ClassRealm ,
-			                            listener : ConfigurationListener ) {
-		converterLookup.registerConverter( new ClassRealmConverter( containerRealm ) );
+  override def configureComponent(
+    component : AnyRef,
+	configuration : PlexusConfiguration ,
+	expressionEvaluator : ExpressionEvaluator,
+    containerRealm : ClassRealm ,
+	listener : ConfigurationListener ) {
+	converterLookup.registerConverter( new ClassRealmConverter( containerRealm ) );
 		
-		//This makes sure we configure the scala component appropriately.
+	//This makes sure we configure the scala component appropriately.
     val converter = new ScalaConfigurationConverter();
 
-    converter.processConfiguration( converterLookup, component, containerRealm, configuration,
-                                    expressionEvaluator, listener );
-	}
+    converter.processConfiguration( 
+      converterLookup, 
+      component, 
+      containerRealm, 
+      configuration,
+      expressionEvaluator, listener 
+    );
+  }
 }
 
 /**

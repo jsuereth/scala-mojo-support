@@ -5,6 +5,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.tools.plugin.extractor.ExtractionException;
 import org.apache.maven.tools.plugin.extractor.MojoDescriptorExtractor;
 import org.apache.maven.tools.plugin.util.PluginUtils;
+import org.apache.maven.tools.plugin._;
 
 import scala.collection.JavaConversions._
 
@@ -12,12 +13,16 @@ import scala.collection.JavaConversions._
  * This class is responsible for extracting mojo descriptions from scala files.
  */
 class ScalaMojoDescriptionExtractor extends MojoDescriptorExtractor {
+	
     /**
 	 * This is responsible for pulling mojo descriptions off of scala files in the project.
 	 */
     @throws(classOf[ExtractionException]) 
-	override def execute(project : MavenProject, pluginDescriptor : PluginDescriptor) : java.util.List[_]= {
+	override def execute(request: PluginToolsRequest) : java.util.List[_]= {
 		//TODO - parse through scala file and rip out MOJO annotations
+    	val project = request.getProject
+    	val pluginDescriptor = request.getPluginDescriptor
+    	
 		val sourceFiles = for {
 		  root <- project.getCompileSourceRoots().asInstanceOf[java.util.List[String]]
           if new java.io.File(root).isDirectory
@@ -33,4 +38,8 @@ class ScalaMojoDescriptionExtractor extends MojoDescriptorExtractor {
         }
         java.util.Arrays.asList(mojoDescriptors : _*)
 	}
+    
+    @throws(classOf[ExtractionException])
+    override def execute(project: MavenProject, pluginDescriptor: PluginDescriptor): java.util.List[_] =
+    	execute(new DefaultPluginToolsRequest(project, pluginDescriptor))
 }
