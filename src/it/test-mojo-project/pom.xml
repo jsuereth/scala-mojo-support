@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>2.2.1</version>
+			<version>@maven.version@</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scala-tools</groupId>
@@ -46,8 +46,8 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>2.4.3</version>
-                <dependencies>
+				<version>2.6</version>
+        <dependencies>
 					<dependency>
 						<groupId>org.scala-tools</groupId>
 						<artifactId>scala-mojo-support</artifactId>
@@ -59,7 +59,7 @@
                 <artifactId>maven-invoker-plugin</artifactId>
                 <version>1.5</version>
                 <configuration>
-                    <debug>false</debug>
+                    <debug>true</debug>
                     <streamLogs>true</streamLogs>
                     <projectsDirectory>src/it</projectsDirectory>
                     <pomIncludes>
