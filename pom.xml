@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.scala-tools</groupId>
     <artifactId>scala-tools-parent</artifactId>
-    <version>1.4</version>
+    <version>1.6</version>
   </parent>
   <properties>
     <maven.version>3.0</maven.version>
@@ -21,11 +21,6 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>${maven.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
       <version>${maven.version}</version>
     </dependency>
     <dependency>
@@ -125,12 +120,11 @@
           <debug>true</debug>
           <streamLogs>false</streamLogs>
           <projectsDirectory>src/it</projectsDirectory>
+          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>          
           <pomIncludes>
-            <pomInclude>**/pom.xml</pomInclude>
+            <pomInclude>test-mojo-project/pom.xml</pomInclude>
+            <pomInclude>test-mojo-project/src/it/testEcho/pom.xml</pomInclude>
           </pomIncludes>
-          <pomExcludes>
-            <pomExclude>test-mojo-project/src/it/**/pom.xml</pomExclude>
-          </pomExcludes>
           <preBuildHookScript>setup.groovy</preBuildHookScript>
           <postBuildHookScript>validate.groovy</postBuildHookScript>
         </configuration>
