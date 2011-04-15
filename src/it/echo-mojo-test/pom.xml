@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.scala-tools</groupId>
+	<artifactId>testEcho</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+    <name>test-scala-plugin Maven Mojo execution</name>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools.mojo</groupId>
+				<artifactId>echo-mojo-java</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<executions>
+	          		<execution>
+	            		<id>first-java-execution</id>
+	            		<phase>generate-resources</phase>
+	            		<goals>
+	              			<goal>echo</goal>
+	            		</goals>
+	            		<configuration>
+	              			<message>This is a message from the java mojo</message>
+	            		</configuration>
+	          		</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.scala-tools.mojo</groupId>
+				<artifactId>echo-mojo-scala</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<executions>
+	          		<execution>
+	            		<id>first-scala-execution</id>
+	            		<phase>generate-resources</phase>
+	            		<goals>
+	              			<goal>echo</goal>
+	            		</goals>
+	          		</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
