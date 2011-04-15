@@ -37,6 +37,9 @@
 	            		<goals>
 	              			<goal>echo</goal>
 	            		</goals>
+	            		<configuration>
+	              			<message>This is a message from the scala mojo</message>
+	            		</configuration>
 	          		</execution>
 				</executions>
 			</plugin>
