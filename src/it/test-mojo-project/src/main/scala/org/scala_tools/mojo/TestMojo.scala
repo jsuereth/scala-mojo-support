@@ -5,13 +5,8 @@ import java.io.{File,PrintStream,FileOutputStream}
 import org.scala_tools.maven.mojo.annotations._
 import org.apache.maven.project.MavenProject
 
-/**
- * Goal which echos "HAI"
- */
-@goal("echo")
-@phase("process-sources")
-@requiresProject
-class TestMojo extends AbstractMojo {
+
+trait AbstractTestMojo extends AbstractMojo {
   /**
    * Location of the file.
    * @parameter expression="${project.build.directory}"
@@ -25,7 +20,15 @@ class TestMojo extends AbstractMojo {
   @expression("${project}")
   @readOnly
   var project : MavenProject = _;
-  
+}
+
+/**
+ * Goal which echos "HAI"
+ */
+@goal("echo")
+@phase("process-sources")
+@requiresProject
+class TestMojo extends AbstractTestMojo {
   
   @throws(classOf[MojoExecutionException])
   override def execute() {

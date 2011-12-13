@@ -18,7 +18,7 @@ class MojoExtractorCompiler(project: MavenProject) extends MavenProjectTools wit
       val settings = new Settings();
       //TODO - Set settings
       settings.classpath.value = getCompileClasspathString(project)
-      settings.stop.tryToSetColon(List("superaccessors"))
+      settings.stop.tryToSetColon(List("constructors"))
       settings.sourcepath.tryToSet(project.getCompileSourceRoots().asInstanceOf[java.util.List[String]].toList)
       val reporter = new ConsoleReporter(settings);
       (settings, reporter)

@@ -19,10 +19,8 @@ trait MojoExtractionInfo {
       annotation match {
         case goal(name) =>
           desc.setGoal(name)
-          desc.setExecuteGoal(name)
         case phase(name) =>
           desc.setPhase(name)
-          desc.setExecutePhase(name)
         case configurator(roleHint) =>
           desc.setComponentConfigurator(roleHint)
         case executeGoal(value) =>
