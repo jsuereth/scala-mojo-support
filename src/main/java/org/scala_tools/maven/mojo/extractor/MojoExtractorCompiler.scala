@@ -15,12 +15,12 @@ class MojoExtractorCompiler(project: MavenProject) extends MavenProjectTools wit
   def extract(sourceFiles: String*): Seq[MojoDescriptor] = {
     //helper method to initialize settings
     def initialize: (Settings, Reporter) = {
-      val settings = new Settings();
+      val settings = new Settings()
       //TODO - Set settings
       settings.classpath.value = getCompileClasspathString(project)
       settings.stop.tryToSetColon(List("constructors"))
       settings.sourcepath.tryToSet(project.getCompileSourceRoots().asInstanceOf[java.util.List[String]].toList)
-      val reporter = new ConsoleReporter(settings);
+      val reporter = new ConsoleReporter(settings)
       (settings, reporter)
     }
 
@@ -31,22 +31,17 @@ class MojoExtractorCompiler(project: MavenProject) extends MavenProjectTools wit
         //override def onlyPresentation = true
       }
       //Extract mojo description
-      def extractMojos(unit: compiler.CompilationUnit) = {
-        for (info <- compiler.parseCompilationUnitBody(unit.body)) yield {
-          extractMojoDescriptor(info)
-        }
-      }
+      def extractMojos(unit: compiler.CompilationUnit) =
+        (compiler parseCompilationUnitBody unit.body map extractMojoDescriptor)
 
       val run = new compiler.Run
-      run.compile(sourceFiles.toList)
+      run compile sourceFiles.toList
 
-      for (unit <- run.units if !unit.isJava) yield {
-        extractMojos(unit)
-      }
+      run.units filterNot (_.isJava) map extractMojos
     }
 
     val (settings, reporter) = initialize
-    execute(settings, reporter).toList.flatMap(x => x)
+    execute(settings, reporter).toList.flatten
   }
 }
 
@@ -59,54 +54,44 @@ trait MojoAnnotationExtractor extends CompilationUnits {
   def parseCompilationUnitBody(body: Tree) = {
 
     /**Slow method to go look for the definition of a parent class */
-    def pullParentClass(symbol: Symbol) = {
-      currentRun.units.toList.flatMap {
-        unit =>
-          val x = unit.body.filter(_.isInstanceOf[ClassDef]).find(_.symbol == symbol).map(_.asInstanceOf[ClassDef])
-          x
-      }
-    }
+    def pullParentClass(symbol: Symbol): List[ClassDef] =
+      for {
+        unit <- currentRun.units.toList
+        tree <- unit.body
+        if tree.isInstanceOf[ClassDef]
+        clazz = tree.asInstanceOf[ClassDef]
+        if clazz.symbol == symbol
+      } yield clazz
 
     /**Pulls the name of the parent class */
-    def pullParentClassSymbol(parent: Tree) = {
+    def pullParentClassSymbol(parent: Tree) =
       parent match {
-        case t@TypeTree() => Some(t.symbol)
-        case _ => None
+        case t @ TypeTree() => Some(t.symbol)
+        case _              => None
       }
-    }
 
+      
     object string {
-      def unapply(tree: Tree) = {
+      def unapply(tree: Tree) =
         tree match {
-          case Literal(constant) => constant.tag match {
-            case StringTag => Some(constant.stringValue)
-            case _ => None
-          }
-          case _ => None 
+          case Literal(constant) if constant.tag == StringTag => Some(constant.stringValue)
+          case _                                              => None 
         }
-      }
     }
 
     object boolean {
-      def unapply(tree: Tree) = {
+      def unapply(tree: Tree) =
         tree match {
-          case Literal(constant) => constant.tag match {
-            case BooleanTag => Some(constant.booleanValue)
-            case _ => None
-          }
+          case Literal(constant) if constant.tag == BooleanTag  => Some(constant.booleanValue)
           // In case a default value was used, this will ignore the value and use true. 
-          case sel@Select(_, _) =>
-            sel.tpe.toString match {
-              case "Boolean" => Some(true)
-              case _ => None
-            }
-          case _ => None
+          // TODO - Don't use toString here...
+          case sel@Select(_, _) if sel.tpe.toString == "Boolean" => Some(true)
+          case _                                                 => None
         }
-      }
     }
 
     /**Parses a list of annotations into a list of MojoAnnotationInfo classes */
-    def parseAnnotations(annotations: List[AnnotationInfo]) = {
+    def parseAnnotations(annotations: List[AnnotationInfo]) =
       for(annotation <- annotations) yield {
         annotation.args match {
           case Nil => MavenAnnotation(annotation.atp.safeToString)
@@ -116,34 +101,33 @@ trait MojoAnnotationExtractor extends CompilationUnits {
           case x => throw new IllegalArgumentException("Annotation (%s) is not supported".format(annotation))
         }
       }
-    }
 
     /**Pulls out information about all injectable variables based on mojo annotaitons. */
-    def parseMojoInjectedVars(classImpl: Tree) = {
-      for{node@ValDef(_, name, tpt, _) <- classImpl.children
-          annotation <- node.symbol.annotations
-          if annotation.atp.safeToString == classOf[parameter].getName
-      } yield {
-        val varInfo = new MojoInjectedVarInfo(name.toString, tpt.toString, parseAnnotations(node.symbol.annotations))
-        varInfo
-      }
-    }
+    def parseMojoInjectedVars(classImpl: Tree) =
+      for {
+        node @ ValDef(_, name, tpt, _) <- classImpl.children
+        annotation <- node.symbol.annotations
+        if annotation.atp.safeToString == classOf[parameter].getName
+        varInfo = new MojoInjectedVarInfo(name.toString, tpt.toString, parseAnnotations(node.symbol.annotations))
+      } yield varInfo
+      
 
     object isGoal {
-      def unapply(classDef: ClassDef) = classDef.symbol.annotations.exists(_.toString.contains("org.scala_tools.maven.mojo.annotations.goal"))
+      def unapply(classDef: ClassDef) = 
+        classDef.symbol.annotations.exists(_.toString.contains("org.scala_tools.maven.mojo.annotations.goal"))
     }
 
     object Goal {
-      def unapply(classDef: ClassDef): Option[(String, List[MavenAnnotation], List[MojoInjectedVarInfo])] = Some((classDef.symbol.tpe.safeToString, parseAnnotations(classDef.symbol.annotations), parseMojoInjectedVars(classDef.impl)))
+      def unapply(classDef: ClassDef): Option[(String, List[MavenAnnotation], List[MojoInjectedVarInfo])] = 
+        Some((classDef.symbol.tpe.safeToString, parseAnnotations(classDef.symbol.annotations), parseMojoInjectedVars(classDef.impl)))
     }
 
     /**Pulls out mojo information froma mojo class */
     def parseMojoClass(mojoClass: ClassDef): MojoClassInfo = mojoClass match {
       case Goal(name, annotations, args) =>
         val parentSymbols = mojoClass.impl.parents.toList.flatMap(pullParentClassSymbol)
-        val parentClasses = parentSymbols.flatMap(pullParentClass)
-
-        val parentArgs = parentClasses.flatMap(x => parseMojoInjectedVars(x.impl))
+        val parentClasses = parentSymbols flatMap pullParentClass
+        val parentArgs = parentClasses map (_.impl) flatMap parseMojoInjectedVars
 
         //Combine all mojo injectable variables...
         val finalArgs = args ++ parentArgs
@@ -151,17 +135,12 @@ trait MojoAnnotationExtractor extends CompilationUnits {
         mojoInfo
     }
 
+    // Wish we could just foldLeft here...
     var mojoInfos: List[MojoClassInfo] = List()
-
-    body.foreach {
-      x =>
-        x match {
-          case c@isGoal() =>
-              mojoInfos = parseMojoClass(c) :: mojoInfos
-          case c: Tree => Unit
-        }
+    body foreach {
+      case c @ isGoal() => mojoInfos = parseMojoClass(c) :: mojoInfos
+      case c: Tree      => ()
     }
-
     mojoInfos
   }
 
@@ -178,8 +157,7 @@ trait MojoAnnotationExtractor extends CompilationUnits {
   /**
    * Extracts a constant variable's runtime value
    */
-  def extractConstantValue(c: Constant) = {
+  def extractConstantValue(c: Constant) =
     //TODO - handle other values
     c.stringValue
-  }
 }
