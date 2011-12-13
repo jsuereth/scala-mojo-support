@@ -14,7 +14,7 @@
 	<groupId>org.scala-tools</groupId>
   <artifactId>scala-mojo-support</artifactId>
   <packaging>jar</packaging>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
   <name>Scala Mojo Support</name>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
 
@@ -163,7 +163,7 @@
       </snapshotRepository>
       <repository>
           <id>nexus.scala-tools.org</id>
-          <url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
+          <url>http://nexus.scala-tools.org/content/repositories/releases</url>
       </repository>
       <site>
           <id>nexus.scala-tools.org</id>
