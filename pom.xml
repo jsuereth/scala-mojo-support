@@ -14,7 +14,7 @@
 	<groupId>org.scala-tools</groupId>
   <artifactId>scala-mojo-support</artifactId>
   <packaging>jar</packaging>
-  <version>0.3</version>
+  <version>0.4-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
 
