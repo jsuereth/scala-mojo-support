@@ -9,7 +9,6 @@ import java.io.File
  */
 trait MavenProjectTools {
 
-  def getCompileClasspathString(p : MavenProject) = {
-    p.getCompileClasspathElements.mkString("",File.pathSeparator,"")
-  }
+  def getCompileClasspathString(p: MavenProject) =
+    p.getCompileClasspathElements.mkString("", File.pathSeparator, "")
 }

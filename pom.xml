@@ -1,16 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
+  <!-- <parent>
     <groupId>org.scala-tools</groupId>
     <artifactId>scala-tools-parent</artifactId>
     <version>1.4</version>
-  </parent>
+  </parent> -->
   <properties>
     <maven.version>3.0</maven.version>
-    <scala.version>2.8.0</scala.version>
+    <scala.version>2.9.1</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+	<groupId>org.scala-tools</groupId>
   <artifactId>scala-mojo-support</artifactId>
   <packaging>jar</packaging>
   <version>0.3-SNAPSHOT</version>
@@ -64,6 +65,11 @@
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
     </dependency>
+		<dependency>
+			<groupId>com.github.jsuereth.scala-arm</groupId>
+			<artifactId>scala-arm_${scala.version}</artifactId>
+			<version>1.0</version>
+	  </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

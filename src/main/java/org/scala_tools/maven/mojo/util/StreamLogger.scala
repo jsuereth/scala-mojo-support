@@ -5,32 +5,19 @@ import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.util.IOUtil
 import org.codehaus.plexus.util.StringUtils
 
-import Resource._
-import RichBufferedReader._
+import resource._
 
-
-class StreamLogger(in : InputStream, log : Log, isErr : Boolean) extends Thread {
- 
+class StreamLogger(in : InputStream, log : Log, isErr : Boolean) extends Thread { 
   override def run() {
-    def logLine(line : String) {
-      if(isErr) {
-             if(!StreamLogger.emacsMode) {
-               log.warn(line)
-             } else {
-               log.warn(StreamLogger.LS + line)
-             }
-           } else {
-             log.info(line)
-           }
-    }
-    
-    new BufferedReader(new InputStreamReader(in)) use {
-      reader =>
-         for(line <- reader) {
-           logLine(line)
-         }
-      
-    }
+    val reader = managed(new BufferedReader(new InputStreamReader(in)))
+    val lines = reader map BufferedReaderHelper.lines toTraversable    
+    def logLine(line: String): Unit = 
+      (isErr, StreamLogger.emacsMode) match {    
+        case (true, true)  => log.warn(StreamLogger.LS + line)
+        case (true, false) => log.warn(line)
+        case _             => log.info(line)
+      }
+    lines foreach logLine
   }
 }
 

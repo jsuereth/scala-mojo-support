@@ -59,10 +59,10 @@ class ConsolePiper(p: Process) extends Thread {
                 Thread.sleep(500l);
             }
         } catch {
-          case exc : InterruptedException =>
+          case exc: InterruptedException =>
             System.err.print("stop by interrupt");
             return;
-          case exc : Exception =>
+          case exc: Exception =>
             System.err.print("!!!! exc !!!");
             exc.printStackTrace();
             throw new RuntimeException("wrap: " + exc.getMessage(), exc);

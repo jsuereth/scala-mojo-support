@@ -14,21 +14,19 @@ object ReflectionUtil {
 	 * @return
 	 *             The type of the var, or None if no var is found
 	 */
-  def getVarType(obj : AnyRef, varName : String) : Option[Class[_]] = {
+  def getVarType(obj: AnyRef, varName: String): Option[Class[_]] = {
     val method = getMethod(obj, varName)
-    method.map(_.getReturnType)
+    method map (_.getReturnType)
   }
   
-  private def getMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] = {
+  private def getMethod(obj: AnyRef, varName: String): Option[java.lang.reflect.Method] =
     (for{
       m <- obj.getClass.getMethods
       if m.getName == varName
     } yield m).headOption
-  }
 
-  private def getVarSetMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] = {
+  private def getVarSetMethod(obj : AnyRef, varName : String) : Option[java.lang.reflect.Method] =
     getMethod(obj, varName + "_$eq")
-  }
 
 	/**
 	 * This method will inject a value into a "var" on a scala object.
@@ -41,7 +39,7 @@ object ReflectionUtil {
 	 * @throws IllegalArgumentException
 	 *          This is thrown if any error occurs (i.e. invalid inputs...)
 	 */
-  def injectIntoVar[A <: AnyRef](obj : AnyRef, varName : String, value : A) {
+  def injectIntoVar[A <: AnyRef](obj: AnyRef, varName: String, value: A): Unit = {
     getVarSetMethod(obj, varName) match {
       case Some(method) =>
         val varType = method.getParameterTypes.head
