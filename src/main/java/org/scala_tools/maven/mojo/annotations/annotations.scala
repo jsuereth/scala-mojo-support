@@ -1,6 +1,5 @@
 package org.scala_tools.maven.mojo.annotations
 
-
 sealed abstract class MavenAnnotation extends StaticAnnotation
 
 object MavenAnnotation {
@@ -86,13 +85,13 @@ case class required() extends MavenAnnotation
 case class readOnly() extends MavenAnnotation
 
 /** Expression to use when setting a parameter */
-case class expression(value : String) extends MavenAnnotation
+case class expression(value: String) extends MavenAnnotation
 
 /** Alias to use for a parameter in the pom */
-case class alias(value : String) extends MavenAnnotation
+case class alias(value: String) extends MavenAnnotation
 
 /** Injects a plexus component */
-case class component(role : String, roleHint : Option[String]) extends MavenAnnotation
+case class component(role: String, roleHint: Option[String]) extends MavenAnnotation
 
 //TODO - Support default values!
 

@@ -36,7 +36,8 @@ class MojoExtractorCompiler(project: MavenProject) extends MavenProjectTools wit
 
       val run = new compiler.Run
       run compile sourceFiles.toList
-
+      // TODO - First parse parent classes
+      // Now Parse goal mojos.
       run.units filterNot (_.isJava) map extractMojos
     }
 
@@ -49,10 +50,14 @@ import org.scala_tools.maven.mojo.annotations._
 
 trait MojoAnnotationExtractor extends CompilationUnits {
   self: Global =>
-
+    
   /**Pulls all mojo classes out of the body of source code. */
   def parseCompilationUnitBody(body: Tree) = {
 
+    def makeParentClassName(symbol: Symbol) =
+      (symbol.tpe.safeToString + 
+       (if(symbol.isTrait) "$class" else ""))
+    
     /**Slow method to go look for the definition of a parent class */
     def pullParentClass(symbol: Symbol): List[ClassDef] =
       for {
@@ -60,7 +65,7 @@ trait MojoAnnotationExtractor extends CompilationUnits {
         tree <- unit.body
         if tree.isInstanceOf[ClassDef]
         clazz = tree.asInstanceOf[ClassDef]
-        if clazz.symbol == symbol
+        if clazz.symbol.tpe.safeToString == makeParentClassName(symbol)
       } yield clazz
 
     /**Pulls the name of the parent class */
@@ -105,7 +110,7 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     /**Pulls out information about all injectable variables based on mojo annotaitons. */
     def parseMojoInjectedVars(classImpl: Tree) =
       for {
-        node @ ValDef(_, name, tpt, _) <- classImpl.children
+        node @ ValDef(_, name, tpt, _) <- classImpl
         annotation <- node.symbol.annotations
         if annotation.atp.safeToString == classOf[parameter].getName
         varInfo = new MojoInjectedVarInfo(name.toString, tpt.toString, parseAnnotations(node.symbol.annotations))
@@ -125,20 +130,21 @@ trait MojoAnnotationExtractor extends CompilationUnits {
     /**Pulls out mojo information froma mojo class */
     def parseMojoClass(mojoClass: ClassDef): MojoClassInfo = mojoClass match {
       case Goal(name, annotations, args) =>
-        val parentSymbols = mojoClass.impl.parents.toList.flatMap(pullParentClassSymbol)
+        val parentSymbols = mojoClass.impl.parents.toList.flatMap(pullParentClassSymbol)        
         val parentClasses = parentSymbols flatMap pullParentClass
         val parentArgs = parentClasses map (_.impl) flatMap parseMojoInjectedVars
-
         //Combine all mojo injectable variables...
         val finalArgs = args ++ parentArgs
         val mojoInfo = new MojoClassInfo(name, annotations, finalArgs)
         mojoInfo
     }
+    
+    
 
     // Wish we could just foldLeft here...
     var mojoInfos: List[MojoClassInfo] = List()
     body foreach {
-      case c @ isGoal() => mojoInfos = parseMojoClass(c) :: mojoInfos
+      case c @ isGoal() => mojoInfos = parseMojoClass(c) +: mojoInfos
       case c: Tree      => ()
     }
     mojoInfos

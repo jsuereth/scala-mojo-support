@@ -43,16 +43,16 @@ class ScalaComponentFactory extends AbstractComponentFactory {
 	       (for {        
 	        child <- componentDescriptor.getConfiguration.getChildren
 	        if child.getName.startsWith(constructorPrefix)
-	        val order = child.getName.substring(constructorPrefix.length)
-	      } yield (child, order)).toList.sortWith(_._2 < _._2).map(_._1).toArray
+	        order = child.getName.substring(constructorPrefix.length)
+	      } yield (child, order)).toSeq.sortWith(_._2 < _._2).map(_._1).toArray
         else Array()
       
       //THis will bomb if we don't have an appropriate constructor
       val constructor = 
-        clazz.getConstructors filter ( _.getParameterTypes.length == constructorArgs.size) head      
+        clazz.getConstructors filter (_.getParameterTypes.length == constructorArgs.size) head      
       val constructorArgVals = 
         for {
-          (argConfig, argType) <- constructorArgs.zip(constructor.getParameterTypes)        
+          (argConfig, argType) <- constructorArgs zip constructor.getParameterTypes        
         } yield loadArgumentValue(argConfig, argType)
       
       if(constructorArgVals.length > 0)

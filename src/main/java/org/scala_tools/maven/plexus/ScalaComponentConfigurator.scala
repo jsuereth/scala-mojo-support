@@ -56,13 +56,13 @@ class ScalaConfigurationConverter extends AbstractConfigurationConverter {
    * @todo a better way, instead of baseType, would be to pass in a factory for new classes that could be based from the given package
    */
   @throws(classOf[ComponentConfigurationException])
-  override def fromConfiguration(converterLookup : ConverterLookup,
-                                 configuration : PlexusConfiguration,
-                                 someType : Class[_],
-                                 baseType : Class[_],
-                                 classLoader : ClassLoader,
-                                 expressionEvaluator : ExpressionEvaluator ,
-                                 listener : ConfigurationListener) : AnyRef = { 
+  override def fromConfiguration(converterLookup: ConverterLookup,
+                                 configuration: PlexusConfiguration,
+                                 someType: Class[_],
+                                 baseType: Class[_],
+                                 classLoader: ClassLoader,
+                                 expressionEvaluator: ExpressionEvaluator ,
+                                 listener: ConfigurationListener): AnyRef = { 
 		
     var retValue = fromExpression( configuration, expressionEvaluator, someType );
     System.err.println("Result of expression evaluation: " + retValue);
@@ -78,7 +78,7 @@ class ScalaConfigurationConverter extends AbstractConfigurationConverter {
             e.setFailedConfiguration( configuration );
           }
           throw e;
-        case t : Throwable => throw t;
+        case t: Throwable => throw t;
       }
     }
     retValue

@@ -22,21 +22,22 @@ class ScalaMojoDescriptionExtractor extends MojoDescriptorExtractor {
 		//TODO - parse through scala file and rip out MOJO annotations
     	val project = request.getProject
     	val pluginDescriptor = request.getPluginDescriptor
-    	
 		val sourceFiles = for {
 		  root <- project.getCompileSourceRoots().asInstanceOf[java.util.List[String]]
-          if new java.io.File(root).isDirectory
+		  file = new java.io.File(root)
+          if file.isDirectory
           source <- PluginUtils.findSources(root, "**/*.scala")
 		} yield root + java.io.File.separator + source
-         
+		
         val compiler = new MojoExtractorCompiler(project)
-        val mojoDescriptors = compiler.extract(sourceFiles : _*).toArray
+		
+        val mojoDescriptors = compiler.extract(sourceFiles: _*).toArray
         for(mojoDescriptor <- mojoDescriptors) {
           mojoDescriptor.setPluginDescriptor(pluginDescriptor)
           mojoDescriptor.setVersion(project.getModelVersion());
           mojoDescriptor.setLanguage("scala")
         }
-        java.util.Arrays.asList(mojoDescriptors : _*)
+        java.util.Arrays.asList(mojoDescriptors: _*)
 	}
     
     @throws(classOf[ExtractionException])
