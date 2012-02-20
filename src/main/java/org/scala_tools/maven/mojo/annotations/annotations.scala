@@ -32,6 +32,7 @@ object MavenAnnotation {
   def apply(annotation: String, value: String): MavenAnnotation = {
     annotation match {
       case Companion(`expression`) => expression(value)
+      case Companion(`defaultValue`) => defaultValue(value)
       case Companion(`alias`) => alias(value)
       case Companion(`configurator`) => configurator(value)
       case Companion(`phase`) => phase(value)
@@ -99,7 +100,8 @@ case class alias(value : String) extends MavenAnnotation
 /** Injects a plexus component */
 case class component(role : String, roleHint : Option[String]) extends MavenAnnotation
 
-//TODO - Support default values!
+/** Default value for a parameter */
+case class defaultValue(value : String) extends MavenAnnotation
 
 /**
  * Annotations for Mojos

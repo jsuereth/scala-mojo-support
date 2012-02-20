@@ -66,6 +66,7 @@ trait MojoExtractionInfo {
           case required() => paramInfo.setRequired(true)
           case readOnly() => paramInfo.setEditable(false)
           case expression(value) => paramInfo.setExpression(value)
+          case defaultValue(value) => paramInfo.setDefaultValue(value)
           case alias(value) => paramInfo.setAlias(value)
           //TODO Add requirement
 //          case component =>
