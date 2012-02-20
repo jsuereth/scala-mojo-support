@@ -38,4 +38,6 @@ build.log
 # IntelliJ files
 .idea
 *.iml
+*.ipr
+*.iws
 
