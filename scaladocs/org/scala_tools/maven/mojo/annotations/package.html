@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Scaladoc for org.scala_tools.maven.mojo.annotations</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		      <script type="text/javascript" src="../../../../../lib/jquery.js"></script>
+          
+      <link href="../../../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value">
+
+      <p id="owner"><a href="../../../../package.html" class="extype" name="org">org</a>.<a href="../../../package.html" class="extype" name="org.scala_tools">scala_tools</a>.<a href="../../package.html" class="extype" name="org.scala_tools.maven">maven</a>.<a href="../package.html" class="extype" name="org.scala_tools.maven.mojo">mojo</a></p>
+
+      <div id="definition">
+        <img src="../../../../../lib/package_big.png" />
+        <h1>annotations</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">annotations</span>
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+      
+      <div id="template">
+
+        <div id="mbrsel">
+          
+          <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+          </div>
+        </div>
+        
+                
+        
+        <div class="members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.MavenAnnotation">
+      <h4 class="signature"><a href="MavenAnnotation.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">MavenAnnotation</span><span class="result"> extends Annotation with StaticAnnotation</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: sealed abstract 
+        </div></div>
+          
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.alias">
+      <h4 class="signature"><a href="alias.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">alias</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Alias to use for a parameter in the pom</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.component">
+      <h4 class="signature"><a href="component.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">component</span><span class="params">(<span name="role">role: String</span>, <span name="roleHint">roleHint: Option[String]</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Injects a plexus component</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.configurator">
+      <h4 class="signature"><a href="configurator.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">configurator</span><span class="params">(<span name="roleHint">roleHint: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">no summary matey</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.defaultValue">
+      <h4 class="signature"><a href="defaultValue.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">defaultValue</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Default value for a parameter</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.description">
+      <h4 class="signature"><a href="description.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">description</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.executeGoal">
+      <h4 class="signature"><a href="executeGoal.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">executeGoal</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.executePhase">
+      <h4 class="signature"><a href="executePhase.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">executePhase</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.executePhaseInLifecycle">
+      <h4 class="signature"><a href="executePhaseInLifecycle.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">executePhaseInLifecycle</span><span class="params">(<span name="phase">phase: String</span>, <span name="lifecycle">lifecycle: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.executionStrategy">
+      <h4 class="signature"><a href="executionStrategy.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">executionStrategy</span><span class="params">()</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.expression">
+      <h4 class="signature"><a href="expression.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">expression</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Expression to use when setting a parameter</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.goal">
+      <h4 class="signature"><a href="goal.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">goal</span><span class="params">(<span name="name">name: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Gives a name to the goal represented by the annotated Mojo</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.inheritByDefault">
+      <h4 class="signature"><a href="inheritByDefault.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">inheritByDefault</span><span class="params">(<span name="value">value: Boolean</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.instantiationStrategy">
+      <h4 class="signature"><a href="instantiationStrategy.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">instantiationStrategy</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.parameter">
+      <h4 class="signature"><a href="parameter.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">parameter</span><span class="params">()</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Used to define a parameter from a var field</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.phase">
+      <h4 class="signature"><a href="phase.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">phase</span><span class="params">(<span name="name">name: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Binds this Mojo to a particular phase of the standard build lifecycle, if specified.</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.readOnly">
+      <h4 class="signature"><a href="readOnly.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">readOnly</span><span class="params">()</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Used to define a parameter as readonly - Cannot be replaced by user in POM</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.required">
+      <h4 class="signature"><a href="required.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">required</span><span class="params">()</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Used to mark a parameter as required to execute</p>
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.requiresDependencyResolution">
+      <h4 class="signature"><a href="requiresDependencyResolution.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">requiresDependencyResolution</span><span class="params">(<span name="scope">scope: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.requiresDirectInvocation">
+      <h4 class="signature"><a href="requiresDirectInvocation.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">requiresDirectInvocation</span><span class="params">(<span name="value">value: Boolean</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.requiresOnline">
+      <h4 class="signature"><a href="requiresOnline.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">requiresOnline</span><span class="params">(<span name="value">value: Boolean</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.requiresProject">
+      <h4 class="signature"><a href="requiresProject.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">requiresProject</span><span class="params">(<span name="value">value: Boolean = <span class="default">true</span></span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.requiresReports">
+      <h4 class="signature"><a href="requiresReports.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">requiresReports</span><span class="params">(<span name="value">value: Boolean</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.since">
+      <h4 class="signature"><a href="since.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">since</span><span class="params">(<span name="value">value: String</span>)</span><span class="result"> extends MavenAnnotation with Product</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+        
+        <div class="members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.scala_tools.maven.mojo.annotations.MavenAnnotation">
+      <h4 class="signature"><a href="MavenAnnotation$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">MavenAnnotation</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+                
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>
