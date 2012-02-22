@@ -9,7 +9,7 @@
   <groupId>com.jsuereth</groupId>
   <artifactId>scala-mojo-support</artifactId>
   <packaging>jar</packaging>
-  <version>0.3</version>
+  <version>0.4</version>
   <name>Scala Mojo Support</name>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
   <url>http://jsuereth.com/scala-mojo-support</url>
