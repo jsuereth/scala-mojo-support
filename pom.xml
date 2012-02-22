@@ -184,16 +184,45 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.4</version>
+        <configuration>
+          <useAgent>true</useAgent>
+        </configuration>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <distributionManagement>
+      <repository>
+          <id>sonatype-nexus</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      </repository>
       <snapshotRepository>
-          <id>nexus.scala-tools.org</id>
-          <url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
+          <id>sonatype-nexus-snapshots</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
       </snapshotRepository>
-      <site>
-          <id>nexus.scala-tools.org</id>
-          <url>dav:http://nexus.scala-tools.org/content/sites/mvnsites-snapshots/scala-mojo-support</url>
-      </site>
   </distributionManagement>
 </project>
