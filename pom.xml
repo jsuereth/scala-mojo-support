@@ -18,6 +18,24 @@
     <connection>scm:git://github.com/jsuereth/scala-mojo-support.git</connection>
     <developerConnection>scm:git://github.com/jsuereth/scala-mojo-support.git</developerConnection>
   </scm>
+  <developers>
+    <developer>
+      <id>jsuereth</id>
+      <name>Josh Suereth</name>
+      <email>joshua.suereth@gmail.com</email>
+      <url>http://jsuereth.com</url>
+      <organization>Typesafe</organization>
+      <organizationUrl>http://typesafe.com</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <properties>
+        <picUrl>http://jsuereth.com/resources/teaching.png</picUrl>
+      </properties>
+    </developer>
+    <!-- TODO - Get contributors to add their own stuffs here -->
+  </developers>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
