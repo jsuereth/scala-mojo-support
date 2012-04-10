@@ -30,4 +30,28 @@ class TestRelfectionUtil {
 	assertTrue(varType3.isDefined);
     assertEquals(classOf[Int], varType3.get);
   }
+
+  def isApproxSubType[T: Manifest, U: Manifest] = manifest[T] <:< manifest[U]
+
+  @Test
+  def injectBoxedPrimitives(){
+    val mojo = new DummyScalaMojo();
+    injectIntoVar(mojo, "otherVar", Int.box(100))
+    assertEquals(100, mojo.otherVar);
+
+    injectIntoVar(mojo, "aShort", Short.box(2))
+    assertEquals(2, mojo.aShort);
+
+    injectIntoVar(mojo, "aLong", Long.box(911))
+    assertEquals(911, mojo.aLong);
+
+    injectIntoVar(mojo, "aDouble", Double.box(2.11))
+    assertEquals(2.11, mojo.aDouble,0);
+
+    injectIntoVar(mojo, "aChar", Char.box('A'))
+    assertEquals('A', mojo.aChar);
+
+    injectIntoVar(mojo, "aByte", Byte.box(1))
+    assertEquals(1, mojo.aByte);
+  }
 }

@@ -44,12 +44,35 @@ object ReflectionUtil {
       case Some(method) =>
         val varType = method.getParameterTypes.head
         val realClass = value.getClass
-        if(!varType.isAssignableFrom(realClass)) {
+
+        if(!isSubType(realClass,varType)) {
           throw new IllegalArgumentException("Can not coerce: " + realClass + " into a " + varType);
         }
-        //TODO - Handle boxing/unboxing...
+
         method.invoke(obj, value);
       case _ => throw new IllegalArgumentException("Invalid var for injection: " + varName + " on: " + obj);
     }
   }
+
+  private def isSubType( source: Class[_], target:Class[_]): Boolean = {
+
+    def isPrimitive[P](implicit m: Manifest[P]): Boolean =
+      Class.forName(m.toString).isAssignableFrom(source)
+
+    def isClass: Boolean =
+      target.isAssignableFrom(source)
+
+    target.toString match {
+      case "int"    => isPrimitive[java.lang.Integer]
+      case "short"  => isPrimitive[java.lang.Short]
+      case "long"   => isPrimitive[java.lang.Long]
+      case "float"  => isPrimitive[java.lang.Float]
+      case "double" => isPrimitive[java.lang.Double]
+      case "char"   => isPrimitive[java.lang.Character]
+      case "byte"   => isPrimitive[java.lang.Byte]
+      case _        => isClass
+    }
+
+  }
+
 }
