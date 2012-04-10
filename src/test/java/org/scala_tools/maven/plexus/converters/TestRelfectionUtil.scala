@@ -39,6 +39,9 @@ class TestRelfectionUtil {
     injectIntoVar(mojo, "otherVar", Int.box(100))
     assertEquals(100, mojo.otherVar);
 
+    injectIntoVar(mojo, "aBoolean", Boolean.box(true))
+    assertEquals(true, mojo.aBoolean);
+
     injectIntoVar(mojo, "aShort", Short.box(2))
     assertEquals(2, mojo.aShort);
 

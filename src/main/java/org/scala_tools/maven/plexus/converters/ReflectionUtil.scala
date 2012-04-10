@@ -63,14 +63,15 @@ object ReflectionUtil {
       target.isAssignableFrom(source)
 
     target.toString match {
-      case "int"    => isPrimitive[java.lang.Integer]
-      case "short"  => isPrimitive[java.lang.Short]
-      case "long"   => isPrimitive[java.lang.Long]
-      case "float"  => isPrimitive[java.lang.Float]
-      case "double" => isPrimitive[java.lang.Double]
-      case "char"   => isPrimitive[java.lang.Character]
-      case "byte"   => isPrimitive[java.lang.Byte]
-      case _        => isClass
+      case "boolean" => isPrimitive[java.lang.Boolean]
+      case "int"     => isPrimitive[java.lang.Integer]
+      case "short"   => isPrimitive[java.lang.Short]
+      case "long"    => isPrimitive[java.lang.Long]
+      case "float"   => isPrimitive[java.lang.Float]
+      case "double"  => isPrimitive[java.lang.Double]
+      case "char"    => isPrimitive[java.lang.Character]
+      case "byte"    => isPrimitive[java.lang.Byte]
+      case _         => isClass
     }
 
   }
