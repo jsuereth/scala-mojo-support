@@ -159,16 +159,12 @@
   </build>
   <distributionManagement>
       <snapshotRepository>
-          <id>nexus.scala-tools.org</id>
-          <url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
+          <id>sonatype-nexus</id>
+          <url>http://oss.sonatype.org/content/repositories/snapshots</url>
       </snapshotRepository>
       <repository>
-          <id>nexus.scala-tools.org</id>
-          <url>http://nexus.scala-tools.org/content/repositories/releases</url>
+          <id>sonatype-nexus</id>
+          <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
       </repository>
-      <site>
-          <id>nexus.scala-tools.org</id>
-          <url>dav:http://nexus.scala-tools.org/content/sites/mvnsites-snapshots/scala-mojo-support</url>
-      </site>
   </distributionManagement>
 </project>
