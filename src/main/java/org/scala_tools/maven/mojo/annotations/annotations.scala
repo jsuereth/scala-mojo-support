@@ -10,7 +10,7 @@ object MavenAnnotation {
     def unapply(ann: String) = try {
       Some(Class.forName(ann + "$").getField("MODULE$").get(null))
     } catch {
-      case _ => None
+      case _: Throwable => None
     }
   }
 

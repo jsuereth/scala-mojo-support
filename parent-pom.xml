@@ -3,12 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <properties>
     <maven.version>3.0</maven.version>
-    <scala.version>2.9.0</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <groupId>com.jsuereth</groupId>
   <artifactId>scala-mojo-support</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <version>0.5-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
@@ -129,7 +128,7 @@
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
           <args>
-            <arg>-target:jvm-1.5</arg>
+            <arg>-target:jvm-${target.jvm}</arg>
             <arg>-no-specialization</arg>
             <arg>-deprecation</arg>
             <!--<arg>-Ystop:erasure</arg>-->
