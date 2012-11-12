@@ -22,7 +22,6 @@
 
   <body>
     <links>
-      <item name="scala-tools" href="http://scala-tools.org/"/>
       <item name="scala-blogs" href="http://scala-blogs.org/"/>
     </links>
     <menu name="Overview">
