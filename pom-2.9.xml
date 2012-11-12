@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.jsuereth</groupId>
+    <artifactId>scala-mojo-support</artifactId>
+    <version>0.5-SNAPSHOT</version>
+    <relativePath>./parent-pom.xml</relativePath>
+  </parent>
+  <properties>
+    <scala.version>2.9.0</scala.version>
+    <target.jvm>1.5</target.jvm>
+  </properties>
+  <artifactId>scala-mojo-support_2.9</artifactId>
+  <packaging>jar</packaging>
+</project>
