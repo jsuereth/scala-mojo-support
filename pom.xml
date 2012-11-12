@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <properties>
     <maven.version>3.0</maven.version>
-    <scala.version>2.8.0</scala.version>
+    <scala.version>2.9.0</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <groupId>com.jsuereth</groupId>
