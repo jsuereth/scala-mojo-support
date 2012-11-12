@@ -5,13 +5,12 @@
     <groupId>com.jsuereth</groupId>
     <artifactId>scala-mojo-support</artifactId>
     <version>0.5-SNAPSHOT</version>
-    <relativePath>./parent-pom.xml</relativePath>
   </parent>
   <properties>
-    <scala.version>2.9.0</scala.version>
-    <target.jvm>1.5</target.jvm>
+    <scala.version>2.10.0-RC2</scala.version>
+    <target.jvm>1.6</target.jvm>
   </properties>
-  <artifactId>scala-mojo-support_2.9</artifactId>
+  <artifactId>scala-mojo-support_2.10.0-RC2</artifactId>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -23,4 +22,19 @@
       <artifactId>scala-library</artifactId>
     </dependency>
   </dependencies>
+  <build>
+    <sourceDirectory>../src/main/java</sourceDirectory>
+    <testSourceDirectory>../src/test/java</testSourceDirectory>
+    <resources>
+      <resource>
+	<directory>../src/main/resources</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+	<groupId>net.alchim31.maven</groupId>
+	<artifactId>scala-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>
