@@ -30,6 +30,5 @@
       <item name="Creating Scala Mojos" href="usage.html" />
     </menu>
     <menu ref="reports" />
-    <menu ref="modules" />
   </body>
 </project>

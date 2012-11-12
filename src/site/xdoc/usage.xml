@@ -9,7 +9,11 @@
   <body>
     <h1>Creating a Scala Mojo</h1>
     <section name="Configuration">
-      <p>to create a scala mojo you need to add scala support into your pom.xml for a normal mojo project</p>
+      <p>To create a scala mojo you need to add scala support into
+      your pom.xml for a normal mojo project.  The binary-compatible
+      Scala version is appended to scala-mojo-support's artifactId.
+      See <a href="#Changing_the_Scala_version">Changing the Scala
+      version</a> for more.</p>
       <source>
         <![CDATA[
 <project>
@@ -22,7 +26,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.jsuereth</groupId>
-			<artifactId>scala-mojo-support</artifactId>
+			<artifactId>scala-mojo-support_2.9</artifactId>
 			<version>0.4</version>
 		</dependency>
         ...
@@ -113,9 +117,33 @@ class TestMojo extends AbstractMojo {
       </source>
     </section>
 
-    <section name="Changing the scala version">
-      <p>Scala Mojos are tied to using the version of scala that the scala-mojo-support is compiled with, and
-      therefore should <b>not</b> depend on any other scala versions.</p>
+    <section name="Changing the Scala version">
+      <p>Scala Mojos are tied to using the version of scala that the
+      scala-mojo-support is compiled with, and therefore should
+      <b>not</b> depend on any other scala versions.</p>
+
+      <p>Beginning with 0.5, scala-mojo-support is cross built.  You
+      must specify an artifactId compatible with your Scala
+      version.</p>
+
+      <table>
+	<thead>
+	  <tr>
+	    <th>Scala version</th>
+	    <th>Artifact Id</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+	    <td>2.9.x</td>
+	    <td>scala-mojo-plugin_2.9</td>
+	  </tr>
+	  <tr>
+	    <td>2.10.0-RC2</td>
+	    <td>scala-mojo-plugin_2.10.0-RC2</td>
+	  </tr>
+	</tbody>
+      </table>
     </section>
 
   </body>
