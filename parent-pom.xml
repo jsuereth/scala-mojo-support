@@ -3,12 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <properties>
     <maven.version>3.0</maven.version>
-    <scala.version>2.8.0</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <groupId>com.jsuereth</groupId>
   <artifactId>scala-mojo-support</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <version>0.5-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
@@ -40,11 +39,6 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>${maven.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
       <version>${maven.version}</version>
     </dependency>
     <dependency>
@@ -112,9 +106,9 @@
     </extensions>  
     <plugins>
       <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <version>2.15.3-SNAPSHOT</version>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>compile</id>
@@ -134,13 +128,14 @@
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
           <args>
-            <arg>-target:jvm-1.5</arg>
+            <arg>-target:jvm-${target.jvm}</arg>
             <arg>-no-specialization</arg>
             <arg>-deprecation</arg>
             <!--<arg>-Ystop:erasure</arg>-->
             <!--<arg>-Xprint:typer</arg>-->
             <!--<arg>-explaintypes</arg>-->
           </args>
+          <recompileMode>incremental</recompileMode>
         </configuration>
       </plugin>
       <plugin>
@@ -211,6 +206,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
         <executions>
           <execution>
             <id>attach-sources</id>
