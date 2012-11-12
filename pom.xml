@@ -10,6 +10,10 @@
   <packaging>pom</packaging>
   <version>0.5-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
+  <modules>
+    <module>scala-mojo-support_2.9</module>
+    <module>scala-mojo-support_2.10.0-RC2</module>
+  </modules>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
   <url>http://jsuereth.com/scala-mojo-support</url>
   <scm>
@@ -68,22 +72,26 @@
         <version>0.9.94</version>
     </dependency>
     <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-compiler</artifactId>
+        <version>${scala.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-library</artifactId>
+        <version>${scala.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <licenses>
     <license>
       <name>BSD</name>
@@ -105,39 +113,6 @@
       </extension>
     </extensions>  
     <plugins>
-      <plugin>
-        <groupId>net.alchim31.maven</groupId>
-        <artifactId>scala-maven-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <goals>
-              <goal>add-source</goal>
-              <goal>compile</goal>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>doc-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <scalaVersion>${scala.version}</scalaVersion>
-          <args>
-            <arg>-target:jvm-${target.jvm}</arg>
-            <arg>-no-specialization</arg>
-            <arg>-deprecation</arg>
-            <!--<arg>-Ystop:erasure</arg>-->
-            <!--<arg>-Xprint:typer</arg>-->
-            <!--<arg>-explaintypes</arg>-->
-          </args>
-          <recompileMode>incremental</recompileMode>
-        </configuration>
-      </plugin>
       <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
         <version>1.5</version>
@@ -217,6 +192,43 @@
         </executions>
       </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+	<plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>scala-maven-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <id>compile</id>
+              <goals>
+		<goal>add-source</goal>
+		<goal>compile</goal>
+		<goal>testCompile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+		<goal>doc-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <scalaVersion>${scala.version}</scalaVersion>
+            <args>
+              <arg>-target:jvm-${target.jvm}</arg>
+              <arg>-no-specialization</arg>
+              <arg>-deprecation</arg>
+              <!--<arg>-Ystop:erasure</arg>-->
+              <!--<arg>-Xprint:typer</arg>-->
+              <!--<arg>-explaintypes</arg>-->
+            </args>
+            <recompileMode>incremental</recompileMode>
+          </configuration>
+	</plugin>
+      </plugins>
+    </pluginManagement>
   </build>
   <distributionManagement>
       <repository>

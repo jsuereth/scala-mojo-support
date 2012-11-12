@@ -22,7 +22,6 @@
 
   <body>
     <links>
-      <item name="scala-tools" href="http://scala-tools.org/"/>
       <item name="scala-blogs" href="http://scala-blogs.org/"/>
     </links>
     <menu name="Overview">
@@ -30,6 +29,5 @@
       <item name="Creating Scala Mojos" href="usage.html" />
     </menu>
     <menu ref="reports" />
-    <menu ref="modules" />
   </body>
 </project>
