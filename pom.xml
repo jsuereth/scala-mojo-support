@@ -3,11 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
   <properties>
     <maven.version>3.0</maven.version>
+    <scala.version>2.9.0</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <groupId>com.jsuereth</groupId>
-  <artifactId>scala-mojo-support</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>scala-mojo-support_2.9</artifactId>
+  <packaging>jar</packaging>
   <version>0.5-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
   <description>The scala-mojo-support project contains helper code for creating Mojos in scala.</description>
@@ -73,21 +74,17 @@
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-compiler</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.scala-lang</groupId>
-        <artifactId>scala-compiler</artifactId>
-        <version>${scala.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.scala-lang</groupId>
-        <artifactId>scala-library</artifactId>
-        <version>${scala.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   <licenses>
     <license>
       <name>BSD</name>
@@ -132,7 +129,7 @@
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
           <args>
-            <arg>-target:jvm-${target.jvm}</arg>
+            <arg>-target:jvm-1.5</arg>
             <arg>-no-specialization</arg>
             <arg>-deprecation</arg>
             <!--<arg>-Ystop:erasure</arg>-->
