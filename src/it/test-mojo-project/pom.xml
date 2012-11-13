@@ -8,9 +8,10 @@
 	<name>test-scala-plugin Maven Mojo</name>
 
     <properties>
-      <scala.version>2.8.0</scala.version>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+      <scala.version>2.9.0</scala.version>
+      <scala-mojo-support.artifactId>scala-mojo-support_2.9</scala-mojo-support.artifactId>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
+   </properties>
 
 	<dependencies>
 		<dependency>
@@ -19,8 +20,8 @@
 			<version>@maven.version@</version>
 		</dependency>
 		<dependency>
-			<groupId>org.scala-tools</groupId>
-			<artifactId>scala-mojo-support</artifactId>
+			<groupId>com.jsuereth</groupId>
+			<artifactId>${scala-mojo-support.artifactId}</artifactId>
 			<version>@project.version@</version>
 		</dependency>
 		<dependency>
@@ -35,6 +36,7 @@
 			<plugin>
 				<groupId>org.scala-tools</groupId>
 				<artifactId>maven-scala-plugin</artifactId>
+				<version>2.15.2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -49,8 +51,8 @@
 				<version>2.6</version>
         <dependencies>
 					<dependency>
-						<groupId>org.scala-tools</groupId>
-						<artifactId>scala-mojo-support</artifactId>
+						<groupId>com.jsuereth</groupId>
+						<artifactId>${scala-mojo-support.artifactId}</artifactId>
 						<version>@project.version@</version>
 					</dependency>
 				</dependencies>
