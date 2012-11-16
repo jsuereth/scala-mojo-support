@@ -1,16 +1,15 @@
 def echoString = "HAI"
-def logFile = new File(basedir, "target/echo.txt")
-//Look for echo string
-def found = false;
+def fileNames = ["echo.txt", "child.txt"]
 
-System.out.println("Logfile = " + logFile)
+fileNames.each({ fileName ->
+    def found = false
+    def logFile = new File(basedir, "target/${fileName}")
+    logFile.eachLine({ line ->
+        if(line.startsWith(echoString)) {
+            found = true
+        }
+    });
+    assert found
+})
 
-logFile.eachLine({ line ->
-   System.out.println("Checking line: " + line)
-   if(line.startsWith(echoString)) {
-   	 found = true;
-   }
-});
-
-assert found
 true

@@ -32,11 +32,20 @@ class TestMojo extends AbstractMojo {
     if(!outputDirectory.exists) {
        outputDirectory.mkdirs()
     }
-    val file = new File(outputDirectory, "echo.txt")
+    val file = new File(outputDirectory, fileName)
     val output = new PrintStream(new FileOutputStream(file))
     
     output.println("HAI")
     output.close()
     
   }
+
+  val fileName = "echo.txt"
+}
+
+@goal("child-echo")
+@phase("process-sources")
+@requiresProject
+class ChildMojo extends TestMojo {
+  override val fileName = "child.txt"
 }
