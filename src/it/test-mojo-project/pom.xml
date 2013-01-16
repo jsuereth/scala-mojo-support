@@ -8,8 +8,8 @@
 	<name>test-scala-plugin Maven Mojo</name>
 
     <properties>
-      <scala.version>2.9.0</scala.version>
-      <scala-mojo-support.artifactId>scala-mojo-support_2.9</scala-mojo-support.artifactId>
+      <scala.version>2.10.0</scala.version>
+      <scala-mojo-support.artifactId>scala-mojo-support_2.10</scala-mojo-support.artifactId>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
    </properties>
 
