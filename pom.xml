@@ -2,12 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
-    <maven.version>3.0</maven.version>
-    <scala.version>2.9.0</scala.version>
+    <maven.version>3.0.4</maven.version>
+    <scala.version>2.10.0</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <groupId>com.jsuereth</groupId>
-  <artifactId>scala-mojo-support_2.9</artifactId>
+  <artifactId>scala-mojo-support_2.10</artifactId>
   <packaging>jar</packaging>
   <version>0.5-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
