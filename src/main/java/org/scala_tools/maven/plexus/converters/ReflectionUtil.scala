@@ -30,6 +30,22 @@ object ReflectionUtil {
     getMethod(obj, varName + "_$eq")
   }
 
+  /**
+   * A mapping of primitive types to their boxed default values.
+   *
+   * See the Java Language Specification, Java SE 7 Edition, §4.12.5 "Initial Values of Variables".
+   */
+  private val boxedDefaultValues = scala.collection.immutable.Map[Class[_], AnyRef](
+    java.lang.Byte.TYPE -> ((0: Byte): java.lang.Byte),
+    java.lang.Short.TYPE -> ((0: Short): java.lang.Short),
+    java.lang.Integer.TYPE -> (0: java.lang.Integer),
+    java.lang.Long.TYPE -> (0L: java.lang.Long),
+    java.lang.Float.TYPE -> (0f: java.lang.Float),
+    java.lang.Double.TYPE -> (0d: java.lang.Double),
+    java.lang.Boolean.TYPE -> java.lang.Boolean.FALSE,
+    java.lang.Character.TYPE -> ('\u0000': java.lang.Character)
+  )
+
 	/**
 	 * This method will inject a value into a "var" on a scala object.
 	 * @param obj
@@ -43,13 +59,12 @@ object ReflectionUtil {
 	 */
   def injectIntoVar[A <: AnyRef](obj : AnyRef, varName : String, value : A) {
     getVarSetMethod(obj, varName) match {
+      case Some(method) if method.getParameterTypes.head.isPrimitive && value == null =>
+        // If it's a primitive type and the input is null, set it to the default value for that primitive type.
+        method.invoke(obj, boxedDefaultValues(method.getParameterTypes.head));
+
       case Some(method) =>
-        val varType = method.getParameterTypes.head
-        val realClass = value.getClass
-        if(!varType.isAssignableFrom(realClass)) {
-          throw new IllegalArgumentException("Can not coerce: " + realClass + " into a " + varType);
-        }
-        //TODO - Handle boxing/unboxing...
+        // Don't bother checking types. Maven knows what the correct type is already, since it's listed in the plugin descriptor, and Java reflection will handle unboxing for us.
         method.invoke(obj, value);
       case _ => throw new IllegalArgumentException("Invalid var for injection: " + varName + " on: " + obj);
     }
