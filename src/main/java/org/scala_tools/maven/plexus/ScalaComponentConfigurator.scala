@@ -66,7 +66,6 @@ class ScalaConfigurationConverter extends AbstractConfigurationConverter {
                                 listener : ConfigurationListener) : AnyRef = { 
 		
 		var retValue = fromExpression( configuration, expressionEvaluator, someType );
-		System.err.println("Result of expression evaluation: " + retValue);
     if ( retValue == null ) {
       try {
         // it is a "composite" - we compose it from its children. It does not have a value of its own
@@ -95,12 +94,10 @@ class ScalaConfigurationConverter extends AbstractConfigurationConverter {
 		listener : ConfigurationListener)  {
 		//TODO - Inject into component the configuration properties.
 		val items = configuration.getChildCount();
-		System.err.println("Processing Configuration for child elements");
     for (  i <- 0 until items ) {
       val childConfiguration = configuration.getChild( i );
 
       val elementName = childConfiguration.getName();
-      System.err.println("Processing child [" + elementName + "]");
 
       //TODO - Make sure the var setter is working correctly and we're passing the correct information to it.
       //TODO - Make sure we can handle "property object" configuration items.
