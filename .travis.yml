@@ -1,6 +1,6 @@
 sudo: false
 language: java
 install:
-  - mvn dependency:list
+  - mvn install -Dgpg.skip=true
 script:
   - mvn integration-test test -Dgpg.skip=true
