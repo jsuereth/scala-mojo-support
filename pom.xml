@@ -2,12 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
-    <maven.version>3.0.4</maven.version>
-    <scala.version>2.10.0</scala.version>
+    <maven.version>3.2.3</maven.version>
+    <scala.version>2.11.6</scala.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <groupId>com.jsuereth</groupId>
-  <artifactId>scala-mojo-support_2.10</artifactId>
+  <artifactId>scala-mojo-support_2.11</artifactId>
   <packaging>jar</packaging>
   <version>0.5.1-SNAPSHOT</version>
   <name>Scala Mojo Support</name>
@@ -84,6 +84,11 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
+      <dependency>
+          <groupId>org.scala-lang.modules</groupId>
+          <artifactId>scala-xml_2.11</artifactId>
+          <version>1.0.3</version>
+      </dependency>
   </dependencies>
   <licenses>
     <license>
@@ -109,7 +114,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>compile</id>
@@ -129,7 +134,7 @@
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
           <args>
-            <arg>-target:jvm-1.5</arg>
+            <arg>-target:jvm-1.6</arg>
             <arg>-no-specialization</arg>
             <arg>-deprecation</arg>
             <!--<arg>-Ystop:erasure</arg>-->
