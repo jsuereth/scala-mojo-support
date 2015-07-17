@@ -1,4 +1,4 @@
 sudo: false
 language: java
 script:
-  - mvn integration-test test
+  - mvn integration-test test -Dgpg.skip=true
